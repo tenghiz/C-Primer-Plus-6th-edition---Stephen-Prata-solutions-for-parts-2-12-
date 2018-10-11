@@ -1,0 +1,67 @@
+#include <iostream>
+#include <cstring> // strlen, strcpy
+
+using namespace std;
+
+struct stringy {
+	char * str; // points to a string
+	int ct; // length of string (not counting '\0')
+};
+
+void set(stringy & y, char * z)
+{
+	int counter = 0;
+	while (z[counter] != '\0')
+	{
+		counter++;
+	}
+	char *pt = new char[counter];
+	for (int a = 0; a < counter; a++)
+	{
+		pt[a] = z[a];
+	}
+	pt[counter + 1] = '\0';
+	y.str = pt;
+	y.ct = counter;
+}
+
+void show(stringy & x, int n = 1)
+{
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < x.ct; j++)
+			cout << x.str[j];
+		cout << endl;
+	}
+	cout << endl;
+}
+
+void show(char * d, int e = 1)
+{
+	for (int m = 0; m < e; m++)
+	{
+		int c = 0;
+		while (d[c] != '\0')
+		{
+			cout << d[c];
+			c++;
+		}
+		cout << endl;
+	}
+	cout << endl;
+}
+
+int main()
+{
+	stringy beany;
+	char testing[] = "Reality isn't what it used to be.";
+	set(beany, testing); 
+	show(beany); // prints member string once
+	show(beany, 2); // prints member string twice
+	testing[0] = 'D';
+	testing[1] = 'u';
+	show(testing); // prints testing string once
+	show(testing, 3); // prints testing string thrice
+	show("Done!");
+	return 0;
+}

@@ -1,0 +1,32 @@
+#include <iostream>
+#include <string>
+#include <cctype>
+
+using namespace std;
+
+void lower_to_upper(string & z)
+{
+	int a = 0;
+	char x;
+	while (z[a] != '\0')
+	{
+		x = toupper(z[a]);
+		cout << x;
+		a++;
+	}
+	cout << endl;
+}
+
+int main()
+{
+	string kuka;
+	while (true)
+	{
+		cout << "Enter a string (q to quit): ";
+		getline(cin, kuka);
+		if (kuka == "q")
+			break;
+		lower_to_upper(kuka);
+	}
+	cout << "Bye!" << endl;
+}

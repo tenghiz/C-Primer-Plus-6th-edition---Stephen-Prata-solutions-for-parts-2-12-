@@ -1,0 +1,47 @@
+// 9.3 - 
+
+#include <iostream>
+#include <new>
+#include <cstring>
+
+const int buffer = 128;
+const int N = 3;
+char buf[buffer];
+
+using namespace std;
+
+struct chaff
+{
+	char dross[20];
+	int slag;
+};
+
+int main()
+{
+	chaff *pt = new (buf) chaff[N];
+	for (int i = 0; i < N; i++)
+	{
+		cout << i + 1 << " member. Please input dross: ";
+		char dross_1[20];
+		cin.getline(dross_1, 20);
+		strcpy_s(pt[i].dross, 20, dross_1);
+		cout << "Please input slag: ";
+		int slag_1;
+		cin >> slag_1;
+		pt[i].slag = slag_1;
+		cin.get();
+	}
+	cout << endl;
+	cout << "Here is a content of buffer." << endl;
+	cout << "Buffer address: " << &buf << endl;
+	for (int i = 0; i < N; i++)
+	{
+		cout << i + 1 << " member." << endl;
+		cout << "Address: " << &pt[i] << endl;
+		cout << "Dross: " << pt[i].dross << endl;
+		cout << "Slag: " << pt[i].slag << endl;
+		cout << endl;
+	}
+	cout << endl;
+	return 0;
+}

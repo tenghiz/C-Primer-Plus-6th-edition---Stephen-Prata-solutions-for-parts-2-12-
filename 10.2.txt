@@ -1,0 +1,122 @@
+// 10.2 - This version doesn't use CONST member functions to display objects content
+// Compiler doesn't allow to use CONST member functions together with GET methods
+
+
+================ header ====================
+
+#pragma once
+
+// stock20.h -- augmented version
+
+#ifndef STOCK20_H_
+#define STOCK20_H_
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Person {
+private:
+	static const int LIMIT = 25;
+	string lname; // Person’s last name
+	char fname[LIMIT]; // Person’s first name
+public:
+	Person();// #1
+	Person(const string & ln, const char * fn = "Heyyou"); // #2
+						// the following methods display lname and fname
+	void Show(); // firstname lastname format
+	void FormalShow(); // lastname, firstname format
+
+	void setLastName(const string & ln);
+	void setFirstName(const char * fn);
+	string getLastName();
+	void getFirstName();
+};
+
+#endif
+
+
+================================== *.cpp ============================
+
+// stock20.cpp -- augmented version
+
+#include <iostream>
+#include <string>
+#include "stock20.h"
+
+using namespace std;
+
+	Person::Person()
+	{ lname = ""; fname[0] = '\0'; } // #1
+
+	Person::Person(const string & ln, const char * fn)
+	{
+		setLastName(ln);
+		setFirstName(fn);
+	}
+		
+	void Person::setLastName(const string & ln)
+	{
+		lname = ln;
+	}
+
+	void Person::setFirstName(const char * fn)
+	{
+		for (int i = 0; i < LIMIT; i++)
+		{
+			fname[i] = fn[i];
+		}
+	}
+
+	string Person::getLastName()
+	{
+		return lname;
+	}
+
+	void Person::getFirstName()
+	{
+		for (int i = 0; i < LIMIT; i++)
+		{
+			cout << fname[i];
+			if (fname[i] == '\0')
+				break;
+		}
+	}
+
+	void Person::Show() 
+	{
+		cout << getLastName() << " ";
+		getFirstName();
+		cout << endl;
+	}
+
+	void Person::FormalShow() 
+	{
+		getFirstName();
+		cout << " " << getLastName();
+		cout << endl;
+	}
+
+
+============================ main.cpp =============================
+
+#include <iostream>
+#include "stock20.h"
+
+int main()
+{
+	Person one; // use default constructor
+	Person two("Smythecraft"); // use #2 with one default argument
+	Person three("Dimwiddy", "Sam"); // use #2, no defaults
+	one.Show();
+	one.FormalShow();
+	cout << endl;
+	two.Show();
+	two.FormalShow();
+	cout << endl;
+	three.Show();
+	three.FormalShow();
+	cout << endl;
+	return 0;
+}

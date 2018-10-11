@@ -1,0 +1,132 @@
+================== main.cpp ======================
+
+#include <iostream>
+#include "golf.h"
+
+extern const int Len;
+
+int setgolf(golf & g);
+void setgolf(golf & g, const char * name, int hc);
+void handicap(golf & g, int hc);
+void showgolf(const golf & g);
+
+int main()
+{
+	std::cout << "How many members would you like to present? ";
+	int a;
+	std::cin >> a;
+	golf *pt = new golf[a];
+	int counter = 0;
+	while (counter < a)
+	{
+		std::cout << "You are about to input " << counter + 1 << " player's name and handicap." << std::endl;
+		std::cout << "Would you like to use VOID or INT function?" << std::endl;
+		std::cout << "Tape 1 for VOID, tape 2 for INT: ";
+		int b;
+		std::cin >> b;
+		std::cin.get();
+		if (b == 2)
+			int c = setgolf(pt[counter]);
+		if (b == 1)
+		{
+			char name1[Len];
+			int hc1;
+			std::cout << "Please enter name: ";
+			std::cin.getline(name1, Len);
+			std::cout << "Please enter handicap: ";
+			std::cin >> hc1;
+			setgolf(pt[counter], name1, hc1);
+		}
+		counter++;
+		std::cout << std::endl;
+	}
+	std::cout << "Here are results for all players: " << std::endl;
+	for (int i = 0; i < a; i++)
+		showgolf(pt[i]);
+	std::cout << "Would you like to reset player's handicap? y/n";
+	char e;
+	std::cin >> e;
+	if (e == 'y')
+	{
+		std::cout << "Please enter player's number (1 to " << a << ")";
+		int g;
+		std::cin >> g;
+		std::cout << "Please enter new handicap: ";
+		int f;
+		std::cin >> f;
+		handicap(pt[g - 1], f);
+	}
+	std::cout << "Here are results for all players: " << std::endl;
+	for (int i = 0; i < a; i++)
+		showgolf(pt[i]);
+	return 0;
+}
+
+====================== golf.h ======================
+
+#pragma once
+
+// golf.h -- for pe9-1.cpp
+const int Len = 40;
+struct golf
+{
+	char fullname[Len];
+	int handicap;
+};
+// non-interactive version:
+// function sets golf structure to provided name, handicap
+// using values passed as arguments to the function
+void setgolf(golf & g, const char * name, int hc);
+// interactive version:
+// function solicits name and handicap from user
+// and sets the members of g to the values entered
+// returns 1 if name is entered, 0 if name is empty string
+int setgolf(golf & g);
+// function resets handicap to new value
+void handicap(golf & g, int hc);
+// function displays contents of golf structure
+void showgolf(const golf & g);
+
+=================== golf.cpp =========================
+
+#include <iostream>
+#include "golf.h"
+
+extern const int Len;
+
+void setgolf(golf & g, const char * name, int hc)
+{
+	int leng = strlen(name);
+	for (int i = 0; i < leng; i++)
+	{
+		g.fullname[i] = name[i];
+	}
+	g.fullname[leng] = '\0';
+	g.handicap = hc;
+}
+
+int setgolf(golf & g)
+{
+	std::cout << "Please enter player's name: ";
+	std::cin.getline(g.fullname, Len);
+	std::cout << "Please enter handicap (1 to 10): ";
+	std::cin >> g.handicap;
+	if (strlen(g.fullname) != 0)
+		return 1;
+	else
+		return 0;
+}
+
+void handicap(golf & g, int hc)
+{
+	g.handicap = hc;
+}
+
+void showgolf(const golf & g)
+{
+	std::cout << "Fill name: ";
+	std::cout << g.fullname << std::endl;
+	std::cout << "Handicap: " << std::endl;
+	std::cout << g.handicap << std::endl;
+	std::cout << std::endl;
+}

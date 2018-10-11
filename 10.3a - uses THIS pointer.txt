@@ -1,0 +1,118 @@
+=========================== main.cpp ===========================
+
+// 10.3 - This version uses THIS pointer.
+// In this case the values of ONE object are reassigned to the values of TWO object
+
+#include <iostream>
+#include "stock20.h"
+
+int main()
+{
+	golf one("Steven Hodgkine", 24);
+	one.showgolf();
+	golf two = one.setgolf();// use the first object to call SETGOLF and to create second object
+	two.showgolf();
+	one.showgolf();
+	one.setName("Fu Kong");
+	one.setHc(23);
+	two.showgolf();
+	one.showgolf();
+	return 0;
+}
+
+
+========================== *.h ================================
+
+#pragma once
+
+#ifndef STOCK20_H_
+#define STOCK20_H_
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class golf
+{
+private:
+	static const int Len = 40;
+	char fullname[Len];
+	int handicap;
+public:
+	golf::golf(const char * name, int hc);
+	void golf::setName(const char * name);
+	void golf::setHc(int hc);
+	golf & golf::setgolf();
+	void golf::getName();
+	int golf::getHc();
+	void golf::showgolf();
+};
+
+#endif
+
+
+============================= *.cpp ==============================
+
+#include <iostream>
+#include <string>
+#include "stock20.h"
+
+using namespace std;
+
+	golf::golf(const char * name, int hc)
+	{
+		setName(name);
+		setHc(hc);
+	}
+
+	void golf::setName(const char * name)
+	{
+		int leng = strlen(name);
+		for (int i = 0; i < leng; i++)
+		{
+			fullname[i] = name[i];
+		}
+		fullname[leng] = '\0';
+	}
+
+	void golf::setHc(int hc)
+	{
+		handicap = hc;
+	}
+
+	golf & golf::setgolf()
+	{
+		cout << "Please enter the full name of player: ";
+		char newName[Len];
+		cin.getline(newName, Len);
+		cout << "Please enter player's handicap: ";
+		int newHc;
+		cin >> newHc;
+		golf psGolf = golf(newName, newHc);
+		*this = psGolf;
+		return *this;
+	}
+
+	void golf::getName()
+	{
+		for (int i = 0; i < Len; i++)
+		{
+			cout << fullname[i];
+			if (fullname[i] == '\0')
+				break;
+		}
+	}
+
+	int golf::getHc()
+	{
+		return handicap;
+	}
+
+	void golf::showgolf()
+	{
+		cout << "Full name: ";
+		getName();
+		cout << endl;
+		cout << "Handicap: " << getHc() << endl;
+	}

@@ -1,0 +1,30 @@
+#include <iostream>
+
+using namespace std;
+
+void displayString(char * x, int n = 1)
+{
+	for (int i = 0; i < n; i++)
+		cout << x << endl;
+}
+
+int main()
+{
+	char mama[] = "Some useless phrase";
+	char z;
+	int counter = 1;
+	while (true)
+	{
+		cout << "Would you like to call the function or to get our off here? y/n: ";
+		cin >> z;
+		if (z == 'n')
+			break;
+		if (counter == 1)
+			displayString(mama);
+		else
+			displayString(mama, counter);
+		counter++;
+	}
+	cout << "BYE!" << endl;
+	return 0;
+}

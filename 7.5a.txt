@@ -1,0 +1,60 @@
+=================== C++ =====================
+//Recursion doesn't work, when ASM subroutine is called from C++
+
+//Here ASM subroutine uses simple loop to calculate factorial
+
+// 7.5 - Factorial
+
+#include <iostream>
+
+extern "C" long double asm_main(int z);
+
+int main()
+{
+	std::cout << "Please enter number: ";
+	int z;
+	std::cin >> z;
+	long double a = asm_main(z);
+	std::cout << z << "! = " << a << std::endl;
+	return 0;
+}
+
+=============== ASM =======================
+.586
+.model flat, C
+.stack 4096
+
+.data
+
+counter dword 1
+
+.code
+asm_main proc
+
+push ebp
+mov ebp, esp
+
+finit
+
+L2:
+mov eax, [ebp+8]
+dec eax
+cmp eax, counter
+je L3
+fild real4 ptr[ebp + 8]
+mov eax, 1
+cmp eax, counter
+jb L1
+fst st(1)
+L1:
+fild counter
+fsub
+fmul
+inc counter
+jmp L2
+L3:
+
+pop ebp
+ret
+asm_main endp
+end 

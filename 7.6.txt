@@ -1,0 +1,51 @@
+//7.6 - 
+
+#include <iostream>
+
+const int ArrSize = 8;
+
+int fill_array(double * arr, int ArrSize)
+{
+	int i = 0;
+	while (i!= ArrSize)
+	{
+		std::cout << "Please enter " << i + 1 << " number: ";
+		std::cin >> arr[i];
+		if (!std::cin)
+			break;
+		i++;
+	}
+	return i;
+}
+
+void show_array(double * arr, int z)
+{
+	for (int i = 0; i < z; i++)
+		std::cout << i << " : " << arr[i] << std::endl;
+}
+
+void reverse_array(double * arr, int z)
+{
+	for (int i = 0; i < z/2; i++)
+	{
+		double temp;
+		temp = arr[i];
+		arr[i] = arr[z - i - 1];
+		arr[z - i - 1] = temp;
+	}
+}
+
+int main()
+{
+	double arr[ArrSize];
+	int z = fill_array(arr, ArrSize);
+	show_array(arr, z);
+	std::cout << std::endl;
+	reverse_array(arr, z);
+	show_array(arr, z);
+	std::cout << std::endl;
+	reverse_array(arr+1, z-2); // reverse all but the first and the last elements
+	show_array(arr, z);
+	std::cout << std::endl;
+	return 0;
+}

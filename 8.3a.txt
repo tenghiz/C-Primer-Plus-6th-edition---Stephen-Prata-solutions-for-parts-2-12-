@@ -1,0 +1,62 @@
+============================ C++ code ========================
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+//transforms lowercase to uppercase, skips all other chars
+extern "C" char asm_(char t);
+
+void lower_to_upper(string & z)
+{
+	int a = 0;
+	char x;
+	while (z[a] != '\0')
+	{
+		x = asm_(z[a]);
+		cout << x;
+		a++;
+	}
+	cout << endl;
+}
+
+int main()
+{
+	string kuka;
+	while (true)
+	{
+		cout << "Enter a string (q to quit): ";
+		getline(cin, kuka);
+		if (kuka == "q")
+			break;
+		lower_to_upper(kuka);
+	}
+	cout << "Bye!" << endl;
+}
+
+=================================ASM code ============================
+
+.586
+.model flat, C
+
+.data
+
+.code
+asm_ proc
+
+push ebp
+mov ebp, esp
+
+mov al, byte ptr [ebp+8]
+.if al < 61h 
+jmp quit
+.elseif al > 7ah
+jmp quit
+.endif
+sub al, 32
+quit:
+
+pop ebp
+ret
+asm_ endp
+end

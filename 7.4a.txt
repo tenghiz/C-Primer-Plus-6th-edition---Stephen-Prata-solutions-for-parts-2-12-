@@ -1,0 +1,97 @@
+==================== C++ ======================
+// 7.4 - Power Ball lottery
+
+// Select x field numbers from the field (1;y)
+// Select 1 power ball number from the field (1;z)
+// Order of selected numbers is not important, permutations can be excluded 
+// Combinations of x numbers from y numbers C(y, x) = y!/(x!(y-x)!).
+// For example, all possible combinations for 5 numbers from 47 numbers is
+// C(47, 5) = 47!/(5!(47-5)!)
+
+// The maximal number that LONG LONG can hold is only 20!.
+// Also, the previous formula must be transformed in order to avoid too big intermediate numbers
+
+#include <iostream>
+
+extern "C" long double probability(int numbers, int picks, int power_ball);
+
+int main()
+{
+	using namespace std;
+	int field, choices, power_ball;
+	cout << "Enter the total number of choices on the game card, \n"
+		"the number of picks allowed and the power ball range:\n";
+	while ((cin >> field >> choices >> power_ball) && choices <= field)
+	{
+		cout << "You have one chance in ";
+		cout << probability(field, choices, power_ball); // compute the odds
+		cout << " of winning.\n";
+		cout << "Next two numbers (q to quit): ";
+	}
+	cout << "bye\n";
+	return 0;
+}
+
+=========================== ASM =========================
+
+.model flat, C
+
+.data
+
+.code
+
+probability proc
+push ebp
+mov ebp, esp
+
+finit
+
+; substract choices from field
+fild real4 ptr[ebp + 8]; field
+fild real4 ptr[ebp + 12]; choices
+fsub
+fld1
+fadd
+
+fst st(1)
+
+; calculate numerator
+mov ecx, [ebp + 12]
+dec ecx
+L1:
+fld1
+fadd
+fmul st(1), st(0)
+loop L1
+
+; pop last multiplicand from stack, now st(0) contains numerator
+fstp real4 ptr[ebp + 8]
+
+;copy numerator to st(1), because original value will be erased during following 2 operations
+fst st(1)
+
+;calculate denominator
+fild real4 ptr[ebp + 12]; choices
+fst st(1)
+
+mov ecx, [ebp + 12]
+sub ecx, 2
+L2:
+fld1
+fsub
+fmul st(1), st(0)
+loop L2
+
+; pop last multiplicand from stack, now st(0) contains denominator, st(1) numerator
+fstp real4 ptr[ebp + 12]
+
+; calculate field probability
+fdiv
+
+fild real4 ptr[ebp + 16]; load power ball
+fmul
+
+pop ebp
+ret
+probability endp
+end

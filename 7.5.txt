@@ -1,0 +1,23 @@
+// 7.5 - Factorial
+
+#include <iostream>
+
+long double factorial(int x)
+{
+	long double z = x;
+	if (x>1)
+	{
+		z *= factorial(x - 1);
+	}
+	return z;
+}
+
+int main()
+{
+	std::cout << "Please enter number: ";
+	int a;
+	std::cin >> a;
+	long double b = factorial(a);
+	std::cout << "The factorial of " << a << " is " << b << std::endl;
+	return 0;
+}

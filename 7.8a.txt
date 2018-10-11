@@ -1,0 +1,50 @@
+// 7.8 - b
+
+// please provide a pointer to function which will fill structure
+
+#include <iostream>
+#include <array>
+#include <string>
+
+// constant data
+const int Seasons = 4;
+const char * Snames[Seasons] = { "Spring", "Summer", "Fall", "Winter" };
+
+struct expenses
+{
+	double exp[Seasons] = {};
+};
+
+// function to modify array object
+// please use pointer to structure in order to make changes
+void fill(expenses * ptr_exp_)
+{
+	using namespace std;
+	for (int i = 0; i < Seasons; i++)
+	{
+		cout << "Enter " << Snames[i] << " expenses: ";
+		cin >> ptr_exp_->exp[i];
+	}
+}
+
+// function that uses array object without modifying it
+void show(expenses exp_)
+{
+	using namespace std;
+	double total = 0.0;
+	cout << "\nEXPENSES\n";
+	for (int i = 0; i < Seasons; i++)
+	{
+		cout << Snames[i] << ": $" << exp_.exp[i] << endl;
+		total += exp_.exp[i];
+	}
+	cout << "Total Expenses: $" << total << endl;
+}
+
+int main()
+{
+	expenses exp_;
+	fill(&exp_);
+	show(exp_);
+	return 0;
+}

@@ -1,0 +1,45 @@
+//7.2 - Golf scores
+
+#include <iostream>
+
+const int ArrLeng = 10;
+
+int input_score(int * arr)
+{
+	int score_n = 0;
+	while (score_n<= ArrLeng)
+	{
+		std::cout << "Press any key to exit. ";
+		std::cout << "Please enter " << score_n +1 << " score: ";
+		std::cin >> arr[score_n];
+		if (!std::cin)
+			break;
+		score_n++;
+	}
+	return score_n;
+}
+
+void display_score(int * arr, int z)
+{
+	std::cout << "Scores: ";
+	for (int i = 0; i < z; i++)
+		std::cout << arr[i] << ", ";
+}
+
+double average_score(int * arr, int z)
+{
+	double sum = 0;
+	for (int i = 0; i < z; i++)
+		sum += arr[i];
+	return sum / z;
+}
+
+int main()
+{
+	int arr[ArrLeng];
+	int z = input_score(arr);
+	display_score(arr, z);
+	double y = average_score(arr, z);
+	std::cout << "Average score: " << y << std::endl;
+	return 0;
+}

@@ -1,0 +1,59 @@
+//7.3 - 
+
+#include <iostream>
+
+struct box
+{
+	char maker[40];
+	float height;
+	float width;
+	float length;
+	float volume;
+};
+
+void fill_struct(box * pt, int box_quantity)
+{
+	for (int i = 0; i < box_quantity; i++)
+	{
+		std::cout << "Please enter " << i+1 << " maker's name: ";
+		std::cin >> pt[i].maker;
+		std::cout << "Please enter box' height: ";
+		std::cin >> pt[i].height;
+		std::cout << "Please enter box' width: ";
+		std::cin >> pt[i].width;
+		std::cout << "Please enter box' length: ";
+		std::cin >> pt[i].length;
+		std::cout << std::endl;
+	}
+}
+
+void calc_volume(box * pt, int box_quantity)
+{
+	for (int i = 0; i < box_quantity; i++)
+	{
+		pt[i].volume = pt[i].height*pt[i].length*pt[i].width;
+	}
+}
+
+void display_box(box * pt, int box_quantity)
+{
+	for (int i = 0; i < box_quantity; i++)
+	{
+		std::cout << i + 1 << " maker's name: ";
+		std::cout << pt[i].maker << std::endl;
+		std::cout << "Box' volume: " << pt[i].volume << std::endl;
+		std::cout << std::endl;
+	}
+}
+
+int main()
+{
+	std::cout << "Please enter number of boxes: ";
+	int box_quantity;
+	std::cin >> box_quantity;
+	box * pt = new box[box_quantity];
+	fill_struct(pt, box_quantity);
+	calc_volume(pt, box_quantity);
+	display_box(pt, box_quantity);
+	return 0;
+}

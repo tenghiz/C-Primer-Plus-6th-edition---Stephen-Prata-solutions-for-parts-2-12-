@@ -1,0 +1,107 @@
+============================= *.h ======================
+
+#pragma once
+
+#ifndef STOCK20_H_
+#define STOCK20_H_
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Person {
+private:
+	static const int LIMIT = 25;
+	string lname; // Person’s last name
+	char fname[LIMIT]; // Person’s first name
+public:
+	Person();// #1
+	Person(const string & ln, const char * fn = "Heyyou"); // #2
+														   // the following methods display lname and fname
+	void Show() const; // firstname lastname format
+	void FormalShow() const; // lastname, firstname format
+
+	void setLastName(const string & ln);
+	void setFirstName(const char * fn);
+};
+
+#endif
+
+
+================================ *.cpp ============================
+
+#include <iostream>
+#include <string>
+#include "stock20.h"
+
+using namespace std;
+
+	Person::Person()
+	{ lname = ""; fname[0] = '\0'; } // #1
+
+	Person::Person(const string & ln, const char * fn)
+	{
+		setLastName(ln);
+		setFirstName(fn);
+	}
+		
+	void Person::setLastName(const string & ln)
+	{
+		lname = ln;
+	}
+
+	void Person::setFirstName(const char * fn)
+	{
+		for (int i = 0; i < LIMIT; i++)
+		{
+			fname[i] = fn[i];
+		}
+	}
+
+	void Person::Show() const
+	{
+		cout << lname << " ";
+		for (int i = 0; i < LIMIT; i++)
+		{
+			cout << fname[i];
+			if (fname[i] == '\0')
+				break;
+		}
+		cout << endl;
+	}
+
+	void Person::FormalShow() const
+	{
+		for (int i = 0; i < LIMIT; i++)
+		{
+			cout << fname[i];
+			if (fname[i] == '\0')
+				break;
+		}
+		cout << " " << lname << endl;
+	}
+
+============================ main.cpp ==========================
+
+// 10.2 - 
+
+#include <iostream>
+#include "stock20.h"
+
+int main()
+{
+	Person one; // use default constructor
+	Person two("Smythecraft"); // use #2 with one default argument
+	Person three("Dimwiddy", "Sam"); // use #2, no defaults
+	one.Show();
+	one.FormalShow();
+	cout << endl;
+	two.Show();
+	two.FormalShow();
+	cout << endl;
+	three.Show();
+	three.FormalShow();
+	cout << endl;
+	return 0;
+}

@@ -1,0 +1,48 @@
+//7.10 - Array of functions
+
+#include <iostream>
+
+double sum_(double x, double y)
+{
+	return x + y;
+}
+
+double sub_(double x, double y)
+{
+	return x - y;
+}
+
+double mul_(double x, double y)
+{
+	return x*y;
+}
+
+int main()
+{
+	while (true)
+	{
+		std::cout << "Please enter two numbers or tape any letter key to exit." << std::endl;
+		std::cout << "Number 1: ";
+		double x, y;
+		std::cin >> x;
+		if (!std::cin)
+			break;
+		std::cout << "Number 2: ";
+		std::cin >> y;
+		if (!std::cin)
+			break;
+		double(*pf[3])(double, double) = {sum_, sub_, mul_};
+		for (int i = 0; i < 3; i++)
+		{
+			if (i == 0)
+				std::cout << "Sum: ";
+			else if (i == 1)
+				std::cout << "Difference: ";
+			else if (i == 2)
+				std::cout << "Product: ";
+			std::cout << pf[i](x, y) << std::endl;
+		}
+	}
+	std::cout << "BYE!" << std::endl;
+	return 0;
+}

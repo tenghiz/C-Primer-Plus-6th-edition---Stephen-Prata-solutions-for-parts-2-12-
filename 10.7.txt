@@ -1,0 +1,99 @@
+===================== main.cpp ==============
+
+// 10.7 - 
+
+#include <iostream>
+#include "stack.h"
+
+using namespace std;
+
+int main()
+{
+	Plorg myPlorg1;
+	myPlorg1.showInfo();
+	myPlorg1.setName("Manda Zuzha");
+	myPlorg1.setCI(23);
+	myPlorg1.showInfo();
+	return 0;
+}
+
+================== *.h ================
+
+#pragma once
+
+// stack.h -- class definition for the stack ADT
+
+#include <iostream>
+
+#ifndef STACK_H_
+#define STACK_H_
+
+using namespace std;
+
+class Plorg
+{
+private:
+	static const int len = 19;
+	char name_[len];
+	int CI;
+public:
+	Plorg(char * name_ = "Plorga", int CI = 50);
+	void setCI(int newCI);
+	void setName(char * newName);
+	char * getName();
+	int getCI();
+	void showInfo();
+};
+
+#endif
+
+=================== *.cpp ===================
+
+#include <iostream>
+#include "stack.h"
+
+using namespace std;
+
+	Plorg::Plorg(char * name_, int CI)
+	{
+		setName(name_);
+		setCI(CI);
+	}
+
+	void Plorg::setCI(int newCI)
+	{
+		CI = newCI;
+	}
+
+	void Plorg::setName(char * newName)
+	{
+			for (int i = 0; i < len; i++)
+			{
+				name_[i] = newName[i];
+			}
+	}
+
+	char * Plorg::getName()
+	{
+		return name_;
+	}
+
+	int Plorg::getCI()
+	{
+		return CI;
+	}
+
+	void Plorg::showInfo()
+	{
+		char *pt = getName();
+		cout << "Plorg's name: ";
+		for (int i = 0; i < len; i++)
+		{
+			cout << pt[i];
+			if (pt[i] == '\0')
+				break;
+		}
+		cout << endl;
+		cout << "Plorg's contentment index: " << getCI() << endl;
+		cout << endl;
+	}

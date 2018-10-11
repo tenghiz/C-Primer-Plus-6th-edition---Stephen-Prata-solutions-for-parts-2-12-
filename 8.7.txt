@@ -1,0 +1,61 @@
+// It's impossible to implement following function for the object count in array:
+
+//template <class T>
+//int count(T * arr)
+//{
+//		return sizeof(arr)/sizeof(T);
+//}
+
+//This function will return the size of pointer, not array ==> 1.
+
+#include <iostream>
+
+const int struct_amount = 3;
+
+template <typename T>
+void ShowArray(T arr[], int n)
+{
+	using namespace std;
+	cout << "template A\n";
+	T sum = 0;
+	for (int i = 0; i < n; i++)
+		sum += arr[i];
+	cout << "Sum of " << n << " things is " << sum << endl;
+}
+
+template <typename T>
+void ShowArray(T * arr[], int n)
+{
+	using namespace std;
+	cout << "template B\n";
+	T sum = 0;
+	for (int i = 0; i < n; i++)
+		sum += *arr[i];
+	cout << "Sum of " << n << " debts is " << sum << endl;
+}
+
+struct debts
+{
+	char name[50];
+	double amount;
+};
+
+int main()
+{
+	using namespace std;
+	int things[] = { 13, 31, 103, 301, 310, 130 };
+	int z = sizeof(things) / sizeof(int);
+	ShowArray(things, z); // uses template A
+
+	struct debts mr_E[struct_amount] =
+	{
+		{ "Ima Wolfe", 2400.0 },
+		{ "Ura Foxe", 1300.0 },
+		{ "Iby Stout", 1800.0 }
+	};
+	double * pd[struct_amount];
+	for (int i = 0; i < 3; i++)
+		pd[i] = &mr_E[i].amount;
+	ShowArray(pd, struct_amount); // uses template B (more specialized)
+	return 0;
+}

@@ -1,0 +1,27 @@
+//7.1 - Harmonic mean
+
+#include <iostream>
+
+double harmonic_mean(double a, double b)
+{
+	return 2 * a*b / (a + b);
+}
+
+
+int main()
+{
+	while (true)
+	{
+		double n1, n2;
+		std::cout << "Please enter first number: ";
+		std::cin >> n1;
+		std::cout << "Please enter second number: ";
+		std::cin >> n2;
+		if (n1 == 0 || n2 == 0)
+			break;
+		double z = harmonic_mean(n1, n2);
+		std::cout << "Harmonic mean of numbers " << n1 << " and " << n2 << " is " << z << std::endl;
+	}
+	std::cout << "BYE!" << std::endl;
+	return 0;
+}

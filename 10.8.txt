@@ -1,0 +1,207 @@
+==================== main.cpp =======================
+
+// 10.8 - Simple list (sketch)
+
+// First member of the list's item contains some double value, second member of the list's item contains value of the preceding member.
+
+// This sketch program doesn't implement exactly all the instructions from the textbook.
+
+// This program can:
+// - Insert new item from the top of the list;
+// - Remove any item from the list (bottom, middle, top);
+// - Add any value to all list members (this function is a class member);
+
+#include <iostream>
+#include "stack.h"
+
+using namespace std;
+
+int main()
+{
+	simpleList mySimpleList1;
+	while (true)
+	{
+		cout << "Please tape I to insert new item, R to remove item,\nC to change item, A to add integer, Q to exit: ";
+		char z;
+		cin.get(z);
+		if (z == 'i' || z == 'I')
+			mySimpleList1.addItem();
+		else if (z == 'r' || z == 'R')
+			mySimpleList1.removeItem();
+		else if (z == 'c' || z == 'C')
+			mySimpleList1.changeItem();
+		else if (z == 'a' || z == 'A')
+			mySimpleList1.addInteger();
+		else if (z == 'q' || z == 'Q')
+			break;
+		cin.get();
+		mySimpleList1.showList();
+	}
+	cout << "Bye!" << endl;
+	return 0;
+}
+
+
+================================= *.h ================
+
+#pragma once
+
+// stack.h -- class definition for the stack ADT
+
+#include <iostream>
+
+#ifndef STACK_H_
+#define STACK_H_
+
+struct list
+{
+	double info = 0;
+	double preceding_info = 0;
+};
+
+typedef list Item;
+
+using namespace std;
+
+class simpleList
+{
+private:
+	static const int max = 5;
+	Item items[max];
+	int top;
+public:
+	simpleList();
+	void addItem();
+	void removeItem();
+	int getTop();
+	void changeItem();
+	void addInteger();
+	void showList();
+};
+
+#endif
+
+
+========================= *.cpp ===================
+
+#include <iostream>
+#include "stack.h"
+
+using namespace std;
+
+	simpleList::simpleList()
+	{
+		top = 0;
+	}
+
+	void simpleList::addItem()
+	{
+		int a = getTop();
+		if (a < max)
+		{
+			cout << "Please enter a value: ";
+			cin >> items[a].info;
+			if (a == 0)
+				items[a].preceding_info = 0;
+			else if (a > 0)
+				items[a].preceding_info = items[a - 1].info;
+			top++;
+		}
+		else
+			cout << "List is full!" << endl;
+	}
+
+	void simpleList::removeItem()
+	{
+		int a = getTop();
+		if (a != 0)
+		{
+			cout << "Which item would you like to remove?\nPlease tape any number in range 0-" << a-1 << ": ";
+			int y;
+			cin >> y;
+			if (y == 0)
+			{
+				for (int i = y; i < max; i++)
+				{
+					items[i].info = items[i + 1].info;
+					items[i].preceding_info = items[i - 1].info;
+				}
+				items[y].preceding_info = 0;
+				top--;
+			}
+			else if (y < (max - 1))
+			{
+				for (int i = y; i < max; i++)
+				{
+					items[i].info = items[i + 1].info;
+					items[i].preceding_info = items[i - 1].info;
+				}
+				top--;
+			}
+			else if (y = (max - 1))
+			{
+				items[y].info = 0;
+				items[y].preceding_info = 0;
+				top--;
+			}
+		}
+		else
+			cout << "List is already empty!" << endl;
+	}
+	
+	int simpleList::getTop()
+	{
+		return top;
+	}
+
+	void simpleList::changeItem()
+	{
+		int z = getTop();
+		if (z != 0)
+		{
+			cout << "Please which item would you like to change?\nTape number in range 0-" << z - 1 << ": ";
+			int y;
+			cin >> y;
+			cout << "Please enter new value: ";
+			cin >> items[y].info;
+			if (y != (z-1))
+				items[y + 1].preceding_info = items[y].info;
+		}
+		else
+			cout << "List is empty" << endl;
+	}
+
+	void simpleList::addInteger()
+	{
+		cout << "This function adds an integer to all list members." << endl;
+		cout << "Please enter the integer to add: ";
+		int z;
+		cin >> z;
+		int a = getTop();
+		for (int i = 0; i < a; i++)
+		{
+			items[i].info += z;
+		}
+		for (int i = 1; i < a; i++)
+		{
+			items[i].preceding_info = items[i - 1].info;
+		}
+	}
+	
+	void simpleList::showList()
+	{
+		cout << "Content of list: " << endl;
+		int z = getTop();
+		if (z != 0)
+		{
+			for (int i = 0; i < z; i++)
+			{
+				cout << i << ": " << endl;
+				cout << items[i].info << endl;
+				cout << items[i].preceding_info << endl;
+				cout << endl;
+			}
+		}
+		else
+			cout << "List is empty" << endl;
+	}

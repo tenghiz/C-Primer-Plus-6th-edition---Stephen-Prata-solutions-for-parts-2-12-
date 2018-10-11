@@ -1,0 +1,102 @@
+//7.9 - 
+
+// Major problem of this program is design of the cycle responsible
+//for the input of student's name in GETINFO subroutine.
+// Since SPACE is used to interrupt input, only combination of 
+//cin.get+while is appropriate to read and store char-by-char input.
+// Please remember that cin.get doesn't insert '\0' at the end of the string.
+
+#include <iostream>
+
+using namespace std;
+
+const int SLEN = 30;
+
+struct student 
+{
+	char fullname[SLEN];
+	char hobby[SLEN];
+	int ooplevel;
+};
+
+int getinfo(student * pa, int n)
+{
+	int i = 0;
+	while (i < n)
+	{
+		cout << "Please enter " << i + 1 << " student's name: ";
+		char temp;
+		int spaces = 0;
+		cin.get(temp);
+		int y = 0;
+		while (temp != '\n')
+		{
+			if (temp == ' ')
+			{
+				spaces++;
+				break;
+			}
+			pa[i].fullname[y] = temp;
+			y++;
+			cin.get(temp);
+		}
+		pa[i].fullname[y] = '\0';
+		if (spaces == 1)
+			break;
+		cout << "Please enter hobby : ";
+		cin >> pa[i].hobby;
+		cout << "Please enter level: ";
+		cin >> pa[i].ooplevel;
+		cin.get();
+		i++;
+	}
+	cout << endl;
+	return i;
+}
+
+void display1(student st)
+{
+	cout << "Student's name is " << st.fullname << endl;
+	cout << "Student's hobby is " << st.hobby << endl;
+	cout << "Student's level is " << st.ooplevel << endl;
+	cout << endl;
+}
+
+void display2(const student * ps)
+{
+	cout << "Student's name is " << ps->fullname << endl;
+	cout << "Student's hobby is " << ps->hobby << endl;
+	cout << "Student's level is " << ps->ooplevel << endl;
+	cout << endl;
+}
+
+void display3(const student pa[], int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		cout << i+1 << " student's name is " << pa[i].fullname << endl;
+		cout << i+1 << " student's hobby is " << pa[i].hobby << endl;
+		cout << i+1 << " student's level is " << pa[i].ooplevel << endl;
+		cout << endl;
+	}
+}
+
+int main()
+{
+	cout << "Enter class size : ";
+	int class_size;
+	cin >> class_size;
+	while (cin.get() != '\n')
+		continue;
+	student * ptr_stu = new student[class_size];
+	int entered = getinfo(ptr_stu, class_size);
+	for (int i = 0; i < entered; i++)
+	{
+		display1(ptr_stu[i]);
+		display2(&ptr_stu[i]);
+	}
+	display3(ptr_stu, entered);
+	delete[] ptr_stu;
+	cout << "Done\n";
+	return 0;
+}

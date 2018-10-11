@@ -1,0 +1,36 @@
+//7.10 - 
+
+#include <iostream>
+
+double sum(double x, double y)
+{
+	return x + y;
+}
+
+double calculate(double x, double y, double(*pf)(double, double))
+{
+	return (*pf)(x, y);
+}
+
+int main()
+{
+	while (true)
+	{
+		std::cout << "Please enter two numbers or tape any letter key to exit." << std::endl;
+		std::cout << "Number 1: ";
+		double x, y;
+		std::cin >> x;
+		if (!std::cin)
+			break;
+		std::cout << "Number 2: ";
+		std::cin >> y;
+		if (!std::cin)
+			break;
+		double z = sum(x, y);
+		std::cout << z << std::endl;
+		double q = calculate(x, y, sum);
+		std::cout << q << std::endl;
+	}
+	std::cout << "BYE!" << std::endl;
+	return 0;
+}

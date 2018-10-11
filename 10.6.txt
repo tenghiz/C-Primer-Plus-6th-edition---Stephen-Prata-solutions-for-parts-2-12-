@@ -1,0 +1,87 @@
+======================= main.cpp ====================
+
+// 10.6 - 
+
+#include <iostream>
+#include "stack.h"
+
+using namespace std;
+
+int main()
+{
+	Move myMove1(12, 34);
+	myMove1.showmove();
+	Move myMove2(56, 78);
+	myMove2.showmove();
+	Move myMove3 = myMove1.add(myMove2);
+	myMove1.showmove();
+	myMove2.showmove();
+	myMove3.showmove();
+	return 0;
+}
+
+
+=========================== *.h ====================
+
+#pragma once
+
+// stack.h -- class definition for the stack ADT
+
+#include <iostream>
+
+#ifndef STACK_H_
+#define STACK_H_
+
+using namespace std;
+
+class Move
+{
+private:
+	double x;
+	double y;
+public:
+	Move(double a = 0, double b = 0); // sets x, y to a, b
+	void showmove() const; // shows current x, y values
+	Move add(const Move & m) const;
+	// this function adds x of m to x of invoking object to get new x,
+	// adds y of m to y of invoking object to get new y, creates a new
+	// move object initialized to new x, y values and returns it
+	void reset(double a = 0, double b = 0); // resets x,y to a, b
+};
+
+#endif
+
+
+============================== *.cpp ================================
+
+#include <iostream>
+#include "stack.h"
+
+using namespace std;
+
+	Move::Move(double a, double b)
+	{
+		x = a;
+		y = b;
+	}
+	
+	void Move::showmove() const
+	{
+		cout << "x = " << x << endl;
+		cout << "y = " << y << endl;
+		cout << endl;
+	}
+
+	Move Move::add(const Move & m) const
+	{
+		double new_x = m.x + this->x;
+		double new_y = m.y + this->y;
+		Move *psMove = new Move(new_x, new_y);
+		return *psMove;
+	}
+
+	void Move::reset(double a, double b)
+	{
+		x = a;
+		y = b;
+	}

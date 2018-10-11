@@ -1,0 +1,156 @@
+======================= main.cpp =======================
+
+// 10.8 - Finally I got it!
+
+#include <iostream>
+#include <cctype> // or ctype.h
+#include "stack.h"
+
+using namespace std;
+
+void addOne(Item & z)
+{
+	z += 1;
+}
+
+int main()
+{
+	Stack st; // create an empty stack
+	char ch;
+	Item po;
+	cout << "Please enter A to add an element,\n"
+		<< "P to remove an element, or Q to quit.\n";
+	while (cin >> ch && toupper(ch) != 'Q')
+	{
+		while (cin.get() != '\n')
+			continue;
+		if (!isalpha(ch))
+		{
+			cout << '\a';
+			continue;
+		}
+		switch (ch)
+		{
+		case 'A':
+		case 'a': cout << "Enter a PO number to add: ";
+			cin >> po;
+			if (st.isfull())
+				cout << "stack already full\n";
+			else
+				st.push(po);
+			break;
+		case 'P':
+		case 'p': if (st.isempty())
+			cout << "stack already empty\n";
+				  else {
+					  st.pop(po);
+					  cout << "PO #" << po << " popped\n";
+				  }
+				  break;
+		}
+		cout << "Please enter A to add a purchase order,\n"
+			<< "P to process a PO, or Q to quit.\n";
+	}
+	st.showStack();
+	cout << "Add 1 to all members" << endl;
+	st.visit(addOne);
+	st.showStack();
+	cout << "Bye\n";
+	return 0;
+}
+
+
+======================= *.h ========================
+
+#pragma once
+
+// stack.h -- class definition for the stack ADT
+
+#ifndef STACK_H_
+#define STACK_H_
+
+typedef double Item;
+
+class Stack
+{
+private:
+	enum { MAX = 10 }; // constant specific to class
+	Item items[MAX]; // holds stack items
+	int top; // index for top stack item
+public:
+	Stack();
+	bool isempty() const;
+	bool isfull() const;
+	int getTop();
+	bool push(const Item & item);
+	bool pop(Item & item); 
+	void visit(void(*pf)(Item &));
+	void showStack();
+};
+#endif
+
+====================== *.cpp ======================
+
+// stack.cpp -- Stack member functions
+
+#include <iostream>
+#include "stack.h"
+
+Stack::Stack() // create an empty stack
+{
+	top = 0;
+}
+
+int Stack::getTop()
+{
+	return top;
+}
+
+bool Stack::isempty() const
+{
+	return top == 0;
+}
+
+bool Stack::isfull() const
+{
+	return top == MAX;
+}
+
+bool Stack::push(const Item & item)
+{
+	if (top < MAX)
+	{
+		items[top++] = item;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool Stack::pop(Item & item)
+{
+	if (top > 0)
+	{
+		item = items[--top];
+		return true;
+	}
+	else
+		return false;
+}
+
+void Stack::visit(void(*pf)(Item &))
+{
+	int z = getTop();
+	for (int i = 0; i < z; i++)
+	{
+		(*pf)(items[i]);
+	}
+}
+
+void Stack::showStack()
+{
+	int z = getTop();
+	for (int i = 0; i < z; i++)
+		std::cout << i + 1 << ": " << items[i] << std::endl;
+	std::cout << std::endl;
+}

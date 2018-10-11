@@ -1,0 +1,53 @@
+================ C++ ====================
+//7.1 - Harmonic mean
+
+#include <iostream>
+
+extern "C" double harmonic_mean(double a, double b);
+
+int main()
+{
+	while (true)
+	{
+		double n1, n2;
+		std::cout << "Please enter first number: ";
+		std::cin >> n1;
+		std::cout << "Please enter second number: ";
+		std::cin >> n2;
+		if (n1 == 0 || n2 == 0)
+			break;
+		double z = harmonic_mean(n1, n2);
+		std::cout << "Harmonic mean of numbers " << n1 << " and " << n2 << " is " << z << std::endl;
+	}
+	std::cout << "BYE!" << std::endl;
+	return 0;
+}
+
+=============== ASM ======================
+.model flat, C
+
+.data
+
+const2_ real8 2.0
+
+.code
+
+harmonic_mean proc
+push ebp
+mov ebp, esp
+
+finit
+fld real8 ptr[ebp + 8]
+fld real8 ptr[ebp + 16]
+fadd
+fld const2_
+fld real8 ptr[ebp + 8]
+fmul
+fld real8 ptr[ebp + 16]
+fmul
+fdiv st(0), st(1)
+
+pop ebp
+ret
+harmonic_mean endp
+end

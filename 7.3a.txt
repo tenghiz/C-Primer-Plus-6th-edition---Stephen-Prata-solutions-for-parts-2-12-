@@ -1,0 +1,119 @@
+========================C++ =======================
+//7.3 - 
+
+#include <iostream>
+
+struct box
+{
+	char maker[40];
+	float height;
+	float width;
+	float length;
+	float volume;
+};
+
+extern "C" void fill_struct(box * pt, int box_quantity);
+
+void calc_volume(box * pt, int box_quantity)
+{
+	for (int i = 0; i < box_quantity; i++)
+	{
+		pt[i].volume = pt[i].height*pt[i].length*pt[i].width;
+	}
+}
+
+void display_box(box * pt, int box_quantity)
+{
+	for (int i = 0; i < box_quantity; i++)
+	{
+		std::cout << i + 1 << " maker's name: ";
+		std::cout << pt[i].maker << std::endl;
+		std::cout << "Box' volume: " << pt[i].volume << std::endl;
+		std::cout << std::endl;
+	}
+}
+
+int main()
+{
+	std::cout << "Please enter number of boxes: ";
+	int box_quantity;
+	std::cin >> box_quantity;
+	box * pt = new box[box_quantity];
+	fill_struct(pt, box_quantity);
+	calc_volume(pt, box_quantity);
+	display_box(pt, box_quantity);
+	return 0;
+}
+
+===================== ASM =======================
+.model flat, C
+
+printf proto,
+pString:PTR BYTE, 
+args : VARARG
+
+scanf PROTO, 
+pFormat:PTR BYTE,
+pBuffer:PTR BYTE, 
+args:VARARG
+
+.data
+
+prompt1 byte "Please enter maker's name: ", 0
+prompt2 byte "Please enter box' height: ", 0
+prompt3 byte "Please enter box' width: ", 0
+prompt4 byte "Please enter box' length: ", 0
+cr_lf byte 0dh, 0ah, 0
+scanf_s byte "%s", 0
+scanf_f byte "%f", 0
+printf_d byte "%d", 0
+maker byte " maker", 0
+
+counter dword 0; current structure
+
+.code
+
+fill_struct proc
+push ebp
+mov ebp, esp
+
+L1:
+invoke printf, addr cr_lf
+mov eax, [ebp + 12]; number of structures
+cmp eax, counter; compares to current structure
+je quit
+mov eax, counter
+inc eax
+invoke printf, addr printf_d, eax
+invoke printf, addr maker
+invoke printf, addr cr_lf
+invoke printf, addr prompt1
+mov esi, [ebp + 8]
+mov eax, counter
+mov ebx, 56d; add the multiple of the structure s length
+mul ebx
+add esi, eax
+invoke scanf, addr scanf_s, esi
+invoke printf, addr prompt2
+mov esi, [ebp + 8]; length of string is unknown, so go back to beginning of the structure
+mov eax, counter
+mov ebx, 56d
+mul ebx
+add esi, eax
+add esi, 40d; add length of array
+invoke scanf, addr scanf_f, esi
+invoke printf, addr prompt3
+add esi, 4
+invoke scanf, addr scanf_f, esi
+invoke printf, addr prompt4
+add esi, 4
+invoke scanf, addr scanf_f, esi
+inc counter
+jmp L1
+
+quit:
+
+pop ebp
+ret
+fill_struct endp
+end

@@ -1,0 +1,80 @@
+======================= C++ ===================
+
+// 8.3 - Convert string object to uppercase
+
+// ASM subroutine works directly with memory adress, where string object is saved
+// Debugger shows, that when the length os string object <= 15, then string object is preceded by some DWORD. This DWORD contains address of the address of the string object.
+// For example, string z = "mama papa". [ebp+8] will give reference to some address, which will contain following bits:
+// xxxxxxxxmama papa. Also, ASM subroutine skips this dword and then converts all the letters to uppercase.
+
+// However, if the length of the string is > 15, in this case [ebp+8] contains reference to a pattern, 
+//composed of 2 dwords: xxxxxxxxyyyyyyyy. Second dword contains address of string object.
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+//transforms lowercase to uppercase, skips all other chars
+extern "C" char * asm_(string & z);
+
+void lower_to_upper(string & z)
+{
+	int a = 0;
+	char * x = asm_(z);
+	cout << x << endl;
+	cout << endl;
+}
+
+int main()
+{
+	string kuka;
+	while (true)
+	{
+		cout << "Enter a string (q to quit): ";
+		getline(cin, kuka);
+		if (kuka == "q")
+			break;
+		lower_to_upper(kuka);
+	}
+	cout << "Bye!" << endl;
+}
+
+======================ASM ======================
+
+.586
+.model flat, C
+
+.data
+
+.code
+asm_ proc
+
+push ebp
+mov ebp, esp
+
+mov esi, [ebp+8]
+add esi, 4
+mov edi, esi
+
+L1:
+mov al, byte ptr [esi]
+cmp al, 0
+je quit
+cmp al, 61h
+jb L2
+cmp al, 7ah
+ja L2
+sub al, 32
+mov byte ptr [esi], al
+L2:
+inc esi
+loop L1
+quit:
+
+mov eax, edi
+
+pop ebp
+ret
+asm_ endp
+end

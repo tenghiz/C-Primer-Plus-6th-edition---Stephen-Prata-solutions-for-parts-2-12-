@@ -1,0 +1,145 @@
+================ main.cpp =======================
+
+// 10.4 - 
+
+#include <iostream>
+#include "stock20.h"
+
+int main()
+{
+	double cabbage[] = { 10.2, 12.1, 44.6, 56.1, 56.4, 88.1 };
+	int z = sizeof(cabbage) / sizeof(double);
+	Sales mySales1(cabbage, z);
+	mySales1.showSales();
+	Sales mySales2 = mySales1.setSales(); // create new object calling method setSales from previously created object
+	mySales1.showSales();
+	mySales2.showSales();
+	return 0;
+}
+
+======================== *.h ========================
+
+#pragma once
+
+#ifndef STOCK20_H_
+#define STOCK20_H_
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Sales
+{
+private:
+	static const int QUARTERS = 4;
+	double sales[QUARTERS] = { 0 };
+	double average;
+	double max;
+	double min;
+public:
+	Sales(const double ar[], int n);
+	Sales & setSales();
+	double * getSales();
+	double getAverage();
+	double getMax();
+	double getMin();
+	void showSales();
+};
+
+#endif
+
+======================= *.cpp ===================
+
+#include <iostream>
+#include <string>
+#include "stock20.h"
+
+using namespace std;
+
+	Sales::Sales(const double ar[], int n)
+	{
+		double sum = 0;
+		int m;
+		if (n > QUARTERS)
+			m = QUARTERS;
+		else
+			m = n;
+		for (int i = 0; i < m; i++)
+		{
+			sales[i] = ar[i];
+			sum += sales[i];
+		}
+		average = sum / QUARTERS;
+		double max_ = sales[0];
+		for (int i = 0; i < QUARTERS; i++)
+		{
+			if (sales[i] > max_)
+				max_ = sales[i];
+		}
+		max = max_;
+		double min_ = sales[0];
+		for (int i = 0; i < QUARTERS; i++)
+		{
+			if (sales[i] < min_)
+				min_ = sales[i];
+		}
+		min = min_;
+	}
+
+	Sales & Sales::setSales()
+	{
+		double newSales[QUARTERS] = { 0 };
+		cout << "Please enter sales for each quarter or tape any letter to exit: " << endl;
+		int i = 0;
+		while (i<QUARTERS)
+		{
+			cout << "Quarter " << i+1 << " : ";
+			if (!cin)
+			{
+				cin.get();
+				cout << endl;
+				break;
+			}
+			cin >> newSales[i];
+			i++;
+		}
+		Sales *ptSales = new Sales(newSales, i);
+		return *ptSales;
+	}
+
+	double * Sales::getSales()
+	{
+		double * pt = sales;
+		return pt;
+	}
+
+	double Sales::getAverage()
+	{
+		return average;
+	}
+
+	double Sales::getMax()
+	{
+		return max;
+	}
+
+	double Sales::getMin()
+	{
+		return min;
+	}
+
+	void Sales::showSales()
+	{
+		cout << "Sales: ";
+		double *ps = getSales();
+		for (int i = 0; i < QUARTERS; i++)
+		{
+			cout << ps[i] << ", ";
+		}
+		cout << endl;
+		cout << "Average: " << getAverage() << endl;
+		cout << "Max: " << getMax() << endl;
+		cout << "Min: " << getMin() << endl;
+		cout << endl;
+	}
