@@ -1,0 +1,147 @@
+============================== main.cpp ==============================
+
+// 11.7 - Complex numbers
+
+// Please notice that overloaded >> operator is ISTREAM object.
+// Also, this operator cannot use CONST operator;
+
+#include <iostream>
+using namespace std;
+#include "complex0.h"
+
+int main()
+{
+	ComplexNumber a(2, 3);
+	cout << "a" << a;
+	a = a * 3;
+	cout << "a" << a;
+	a = 3 * a;
+	cout << "a" << a;
+	ComplexNumber b(1, 4);
+	a = a - b;
+	cout << "a" << a;
+	ComplexNumber c(1, 2);
+	c = c*b;
+	cout << "c" << c;
+	a = ~a;
+	cout << "a" << a;
+	ComplexNumber d;
+	cin >> d;
+	cout << "d" << d;
+}
+
+============================ *.h =============================
+
+#pragma once
+
+// stonewt.h -- definition for the Stonewt class
+
+#ifndef COMPLEX0_H_
+#define COMPLEX0_H_
+
+#include <iostream>
+using namespace std;
+
+class ComplexNumber
+{
+private:
+	int real;
+	int imaginary;
+public:
+	ComplexNumber(int x, int y);
+	ComplexNumber(); // default constructor
+	~ComplexNumber();
+
+	friend ostream & operator<<(ostream & os, const ComplexNumber & cn);
+	friend istream & operator>>(istream & is, ComplexNumber & cn);
+	
+	ComplexNumber operator+(const ComplexNumber & cn) const;
+	ComplexNumber operator-(const ComplexNumber & cn) const;
+	ComplexNumber operator*(double x);
+	friend ComplexNumber operator*(double x, const ComplexNumber & cn);
+	friend ComplexNumber operator*(const ComplexNumber & cn, const ComplexNumber & cn1);
+	friend ComplexNumber operator~(const ComplexNumber & cn);
+};
+
+#endif
+
+============================ *.cpp ==========================
+
+// stonewt.cpp -- Stonewt methods
+
+#include <iostream>
+using namespace std;
+#include "complex0.h"
+
+ComplexNumber::ComplexNumber(int x, int y)
+	{
+		real = x;
+		imaginary = y;
+	}
+
+ComplexNumber::ComplexNumber()
+{
+	real = 0;
+	imaginary = 0;
+}
+ComplexNumber::~ComplexNumber()
+{
+
+}
+
+ostream & operator<<(ostream & os, const ComplexNumber & cn)
+{
+	os << " is (" << cn.real << ", " << cn.imaginary << "i)" << endl;
+	return os;
+}
+
+istream & operator>>(istream & is, ComplexNumber & cn)
+{
+	cout << "Real: ";
+	is >> cn.real;
+	cout << "Imaginary: ";
+	is >> cn.imaginary;
+	return is;
+}
+
+ComplexNumber ComplexNumber::operator+(const ComplexNumber & cn) const
+{
+	ComplexNumber sum;
+	sum.real = cn.real + real;
+	sum.imaginary = cn.imaginary + imaginary;
+	return sum;
+}
+
+ComplexNumber ComplexNumber::operator-(const ComplexNumber & cn) const
+{
+	return ComplexNumber(real - cn.real, imaginary - cn.imaginary);
+}
+
+ComplexNumber ComplexNumber::operator*(double x)
+{
+	return ComplexNumber(real*x, imaginary*x);
+}
+
+ComplexNumber operator*(double x, const ComplexNumber & cn)
+{
+	ComplexNumber product;
+	product.real = cn.real*x;
+	product.imaginary = cn.imaginary*x;
+	return product;
+}
+
+ComplexNumber operator*(const ComplexNumber & cn, const ComplexNumber & cn1)
+{
+	ComplexNumber product;
+	product.real = cn.real*cn1.real - cn.imaginary*cn1.imaginary;
+	product.imaginary = cn.real*cn1.imaginary - cn1.real*cn.imaginary;
+	return product;
+}
+
+ComplexNumber operator~(const ComplexNumber & cn)
+{
+	ComplexNumber conjugate;
+	conjugate.imaginary = -cn.imaginary;
+	conjugate.real = cn.real;
+	return conjugate;
+}

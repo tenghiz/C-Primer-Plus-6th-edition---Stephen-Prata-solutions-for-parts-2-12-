@@ -1,0 +1,71 @@
+// 11.3 - Random walk - Report average, max and min number of steps for N trials
+
+#include <iostream>
+#include <cstdlib> // rand(), srand() prototypes
+#include <ctime> // time() prototype
+#include "vect.h"
+#include <fstream> 
+
+int main()
+{
+	using namespace std;
+
+	// Create VECTOR object
+	using VECTOR::Vector;
+	srand(time(0)); // seed random-number generator
+	double direction;
+	Vector step;
+	Vector result(0.0, 0.0);
+	unsigned long steps = 0;
+	double target;
+	double dstep;
+	cout << "How many trials would you like to perform? ";
+	int z;
+	cin >> z;
+	int *pt_steps = new int[z];
+	cout << "Enter target distance: ";
+	cin >> target;
+	cout << "Enter step length: ";
+	cin >> dstep;
+	int counter = 0;
+	while (counter < z)
+	{
+		while (result.magval() < target)
+		{
+			direction = rand() % 360;
+			step.reset(dstep, direction, Vector::POL);
+			result = result + step;
+			steps++;
+		}
+		pt_steps[counter] = steps;
+		counter++;
+		steps = 0;
+		result.reset(0.0, 0.0);
+	}
+	cout << endl;
+	cout << "Number of steps for " << z << " trials: " << endl;
+	double sum = 0;
+	for (int i = 0; i < z; i++)
+	{
+		cout << pt_steps[i] << endl;
+		sum += pt_steps[i];
+	}
+	cout << endl;
+	cout << "Average number of steps: " << sum / z << endl;
+	int max = pt_steps[0];
+	for (int i = 0; i < z; i++)
+	{
+		if (pt_steps[i] > max)
+			max = pt_steps[i];
+	}
+	cout << "Maximal number of steps: " << max << endl;
+	int min = pt_steps[0];
+	for (int i = 0; i < z; i++)
+	{
+		if (pt_steps[i] < min)
+			min = pt_steps[i];
+	}
+	cout << "Minimal number of steps: " << min << endl;
+	cout << endl;
+	return 0;
+}

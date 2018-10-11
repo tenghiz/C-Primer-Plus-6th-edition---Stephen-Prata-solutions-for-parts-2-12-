@@ -1,0 +1,246 @@
+====================== main.cpp =======================
+
+// 11.6 - Stone class - Overload relational operators
+
+// All overloaded operators must be friends. In this case both compared values can be passed as parameters
+
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+#include "stonewt.h"
+
+#define arr_leng 6
+
+int main()
+{
+	srand(time(0));
+	Stonewt arr[arr_leng] = { Stonewt(11) };
+	int counter = 1;
+	while (counter < arr_leng)
+	{
+		arr[counter] = Stonewt(rand() % 100);// set weight to some rndom value between 0 and 100
+		counter++;
+	}
+	for (int i = 0; i < arr_leng; i++)
+	{
+		cout << i << ": " << arr[i];
+	}
+	Stonewt max = arr[1];
+	int z = 0;
+	for (int i = 0; i < arr_leng; i++)
+	{
+		if (arr[i] > max)
+		{
+			max = arr[i];
+			z = i;
+		}
+	}
+	cout << "The biggest element is number " << z << ". " << max;
+	Stonewt min = arr[1];
+	int y = 0;
+	for (int i = 0; i < arr_leng; i++)
+	{
+		if (arr[i] < min)
+		{
+			min = arr[i];
+			y = i;
+		}
+	}
+	cout << "The smallest element is number " << y << ". " << min;
+	int x = 0;
+	for (int i = 1; i < arr_leng; i++)
+	{
+		if (arr[i] >= arr[0])
+			x++;
+	}
+	cout << x << " elements are greater or equal than 11" << endl;
+	return 0;
+}
+
+======================== *.h =======================
+
+#pragma once
+
+// stonewt.h -- definition for the Stonewt class
+
+#ifndef STONEWT_H_
+#define STONEWT_H_
+
+class Stonewt
+{
+public:
+	enum Mode {STONES, POUNDS, FLOAT};
+private:
+	enum { Lbs_per_stn = 14 }; // pounds per stone
+	int stone; // whole stones
+	double pds_left; // fractional pounds
+	int pounds; // entire weight in pounds
+	Mode mode;
+public:
+	Stonewt(double x, Mode form = STONES); 
+	Stonewt(); // default constructor
+	~Stonewt();
+	void show_lbs() const; // show weight in pounds format
+	void show_stn() const; // show weight in stone format
+
+	void stone_mode();
+	void pound_mode();
+	void float_mode();
+
+	friend std::ostream & operator<<(std::ostream & os, const Stonewt & st);
+	
+	Stonewt operator+(const Stonewt & st) const;
+	Stonewt operator-(const Stonewt & st) const;
+	Stonewt operator*(double x);
+	friend Stonewt operator*(double x, const Stonewt & st);
+	Stonewt operator/(double x);
+
+	friend bool operator==(const Stonewt & st1, const Stonewt & st2);
+	friend bool operator<(const Stonewt & st1, const Stonewt & st2);
+	friend bool operator>(const Stonewt & st1, const Stonewt & st2);
+	friend bool operator!=(const Stonewt & st1, const Stonewt & st2);
+	friend bool operator<=(const Stonewt & st1, const Stonewt & st2);
+	friend bool operator>=(const Stonewt & st1, const Stonewt & st2);
+};
+
+#endif
+
+========================= *.cpp ======================
+
+// stonewt.cpp -- Stonewt methods
+
+#include <iostream>
+using namespace std;
+#include "stonewt.h"
+
+// construct Stonewt object from double value
+Stonewt::Stonewt(double x, Mode form)
+{
+	mode = form;
+	if (form == STONES)
+	{
+		stone = int(x+0.5);//round to closes bigger integer
+		pounds = int(x*Lbs_per_stn);
+		pds_left = x*Lbs_per_stn;
+	}
+	else if (form == POUNDS)
+	{
+		stone = int(x/Lbs_per_stn);
+		pounds = int(x+0.5);//round to closes bigger integer
+		pds_left = x;
+	}
+	else if (form == FLOAT)
+	{
+		stone = int(x / Lbs_per_stn);
+		pounds = int(x + 0.5);
+		pds_left = x;
+	}
+}
+
+Stonewt::Stonewt() // default constructor, wt = 0
+{
+	stone = pounds = pds_left = 0;
+}
+
+Stonewt::~Stonewt() // destructor
+{ }
+
+std::ostream & operator<<(std::ostream & os, const Stonewt & st)
+{
+	if (st.mode == Stonewt::STONES)
+		os << "Weight in stones: " << st.stone << endl;
+	else if (st.mode == Stonewt::POUNDS)
+		os << "Weight in pounds: " << st.pounds << endl;
+	else if (st.mode == Stonewt::FLOAT)
+		os << "Weight in pounds with floating point: " << st.pds_left << endl;
+	return os;
+}
+
+void Stonewt::stone_mode()
+{
+	mode = STONES;
+}
+
+void Stonewt::pound_mode()
+{
+	mode = POUNDS;
+}
+
+void Stonewt::float_mode()
+{
+	mode = FLOAT;
+}
+
+Stonewt Stonewt::operator+(const Stonewt & st) const
+{
+	return Stonewt(st.stone + stone);
+}
+
+Stonewt Stonewt::operator-(const Stonewt & st) const
+{
+	return Stonewt(stone- st.stone);
+}
+
+Stonewt operator*(double x, const Stonewt & st)
+{
+	return st.stone*x;
+}
+
+Stonewt Stonewt::operator*(double x)
+{
+	return stone*x;
+}
+
+Stonewt Stonewt::operator/(double x)
+{
+	return stone/x;
+}
+
+bool operator==(const Stonewt & st1, const Stonewt & st2)
+{
+	if (st1.stone == st2.stone)
+		return true;
+	else
+		return false;
+}
+
+bool operator<(const Stonewt & st1, const Stonewt & st2)
+{
+	if (st1.stone < st2.stone)
+		return true;
+	else
+		return false;
+}
+
+bool operator>(const Stonewt & st1, const Stonewt & st2)
+{
+	if (st1.stone > st2.stone)
+		return true;
+	else
+		return false;
+}
+
+bool operator!=(const Stonewt & st1, const Stonewt & st2)
+{
+	if (st1.stone != st2.stone)
+		return true;
+	else
+		return false;
+}
+
+bool operator<=(const Stonewt & st1, const Stonewt & st2)
+{
+	if (st1.stone <= st2.stone)
+		return true;
+	else
+		return false;
+}
+
+bool operator>=(const Stonewt & st1, const Stonewt & st2)
+{
+	if (st1.stone >= st2.stone)
+		return true;
+	else
+		return false;
+}

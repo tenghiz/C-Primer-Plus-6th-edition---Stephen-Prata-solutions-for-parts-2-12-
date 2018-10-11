@@ -1,0 +1,145 @@
+============== *.h ===================
+
+#pragma once
+
+#ifndef NIFTY_H_
+#define NIFTY_H_
+
+class Cow 
+{
+private:
+	char name[20];
+	char * hobby;
+	double weight;
+public:
+	Cow();
+	Cow(const char * nm, const char * ho, double wt);
+	Cow(const Cow & c);
+	~Cow();
+	Cow & operator=(const Cow & c);
+	void ShowCow() const; // display all cow data
+};
+
+#endif
+
+================ *.cpp =================
+
+#include <iostream>
+#include <cstring> // string processing
+#include "nifty.h"
+
+using namespace std;
+
+	Cow::Cow()
+	{
+		strcpy(name, "Unknown");
+		int z = strlen("Unknown");
+		hobby = new char[z + 1];
+		strcpy(hobby, "Unknown");
+		weight = 0;
+	}
+
+	Cow::Cow(const char * nm, const char * ho, double wt)
+	{
+		int m = strlen(nm);
+		if (m < 20)
+		{
+			strcpy(name, nm);
+		}
+		else
+		{
+			for (int i = 0; i < 20; i++)
+				name[i] = nm[i];
+			name[19] = '\0';
+		}
+		int z = strlen(ho);
+		hobby = new char[z + 1];
+		strcpy(hobby, ho);
+		weight = wt;
+	}
+
+	Cow::Cow(const Cow & c)
+	{
+		int z = strlen(c.name);
+		if (z < 20)
+		{
+			strcpy(name, c.name);
+		}
+		else
+		{
+			for (int i = 0; i < 20; i++)
+				name[i] = c.name[i];
+			name[19] = '\0';
+		}
+		int b = strlen(c.hobby);
+		hobby = new char[b + 1];
+		strcpy(hobby, c.hobby);
+		weight = c.weight;
+	}
+
+	Cow::~Cow()
+	{
+		delete[] hobby;
+	}
+
+	Cow & Cow::operator=(const Cow & c)
+	{
+		if (this == &c)
+			return *this;
+		int z = strlen(c.name);
+		if (z < 20)
+		{
+			strcpy(name, c.name);
+		}
+		else
+		{
+			for (int i = 0; i < 20; i++)
+				name[i] = c.name[i];
+			name[19] = '\0';
+		}
+		delete[] hobby;
+		int b = strlen(c.hobby);
+		hobby = new char[b + 1];
+		strcpy(hobby, c.hobby);
+		weight = c.weight;
+		return *this;
+	}
+
+	void Cow::ShowCow() const
+	{
+		cout << "Name: ";
+		for (int i = 0; i < strlen(name); i++)
+			cout << name[i];
+		cout << endl;
+		cout << "Hobby: ";
+		for (int i = 0; i < strlen(hobby); i++)
+			cout << hobby[i];
+		cout << endl;
+		cout << "Weight: " << weight << endl;
+		cout << endl;
+	}
+
+=================== main.cpp =====================
+
+#include <iostream>
+#include "nifty.h"
+
+using namespace std;
+
+int main()
+{
+	Cow myCow1; // default constructor
+	myCow1.ShowCow();
+	// constructor
+	Cow myCow2("Pupetta don't like to swim alone as a grown girl", "Jujetta don't like to swim alone as a grown girl", 25);
+	myCow2.ShowCow();
+	Cow myCow3(myCow2);
+	myCow3.ShowCow();
+	Cow myCow4("Puppa", "Xhosa", 113); // constructor
+	Cow myCow5 = Cow(myCow4);
+	myCow5.ShowCow();
+	Cow myCow6;
+	myCow6 = myCow4; // assignment
+	myCow6.ShowCow();
+	return 0;
+}

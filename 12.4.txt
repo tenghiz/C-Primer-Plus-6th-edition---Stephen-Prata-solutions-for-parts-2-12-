@@ -1,0 +1,187 @@
+=============== *.h ==================
+
+#pragma once
+
+#ifndef STACK_H_
+#define STACK_H_
+
+typedef unsigned long Item;
+
+class Stack
+{
+private:
+	enum { MAX = 10 }; // constant specific to class
+	Item * pitems; // holds stack items
+	int size; // number of elements in stack
+	int top; // index for top stack item
+public:
+	Stack(int n = MAX); // creates stack with n elements
+	Stack(const Stack & st);
+	~Stack();
+	bool isempty() const;
+	bool isfull() const;
+	// push() returns false if stack already is full, true otherwise
+	bool push(const Item & item); // add item to stack
+								  // pop() returns false if stack already is empty, true otherwise
+	bool pop(Item & item); // pop top into item
+	Stack & operator=(const Stack & st);
+};
+
+#endif
+
+======================== *.cpp =================
+
+#include <iostream>
+#include "stack.h"
+
+using namespace std;
+
+Stack::Stack(int n) 
+{
+	pitems = new Item[n];
+	for (int i = 0; i < n; i++)
+	{
+		pitems[i] = 0;
+	}
+	size = n;
+	top = n;
+}
+
+Stack::Stack(const Stack & st)
+{
+	size = st.size;
+	top = st.top;
+	pitems = new Item[size];
+	for (int i = 0; i < size; i++)
+		pitems[i] = st.pitems[i];
+}
+
+Stack::~Stack()
+{
+	delete[] pitems;
+}
+
+bool Stack::isempty() const
+{
+	return top == 0;
+}
+
+bool Stack::isfull() const
+{
+	return top == MAX;
+}
+
+bool Stack::push(const Item & item)
+{
+	if (top < MAX)
+	{
+		Item *pitems1 = new Item[size + 1];
+		for (int i = 0; i < size; i++)
+			pitems1[i] = pitems[i];
+		pitems1[size] = item;
+		delete[] pitems;
+		pitems = new Item[size + 1];
+		for (int i = 0; i < size+1; i++)
+			pitems[i] = pitems1[i];
+		delete[] pitems1;
+		top++;
+		size++;
+		cout << "Current content of stack: ";
+		for (int i = 0; i < size; i++)
+			cout << pitems[i] << "; ";
+		cout << endl;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool Stack::pop(Item & item)
+{
+	if (top > 0)
+	{
+		item = pitems[size-1];
+		Item *pitems1 = new Item[size - 1];
+		for (int i = 0; i < size-1; i++)
+			pitems1[i] = pitems[i];
+		delete[] pitems;
+		pitems = new Item[size-1];
+		for (int i = 0; i < size-1; i++)
+			pitems[i] = pitems1[i];
+		delete[] pitems1;
+		size--;
+		top--;
+		cout << "Current content of stack: ";
+		for (int i = 0; i < size; i++)
+			cout << pitems[i] << "; ";
+		cout << endl;
+		return true;
+	}
+	else
+		return false;
+}
+
+Stack & Stack::operator=(const Stack & st)
+{
+	if (this == &st)
+		return *this;
+	size = st.size;
+	top = st.top;
+	Item *pitems1 = new Item[size];
+	for (int i = 0; i < size; i++)
+		pitems1[i] = st.pitems[i];
+	delete[] pitems;
+	pitems = new Item[size];
+	for (int i = 0; i < size;i++)
+		pitems[i] = pitems1[i];
+	delete[] pitems1;
+	return *this;
+}
+
+================= main.cpp ====================
+
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include "stack.h"
+
+using namespace std;
+
+int main()
+{
+	unsigned long po;
+	srand(time(0));
+	int a = rand() % 10; 
+	Stack st(a); // create the stack of the random size (0-10)
+	cout << "Stack 1 was created. Size = " << a << endl;
+	// fill the vacant positions in the stack
+	cout << "Fill remaining positions with random numbers: " << endl;
+	while (!st.isfull())
+	{
+		po = rand() % 100;
+		st.push(po);
+		cout << "Number " << po << " was pushed onto stack" << endl;
+	}
+	cout << endl;
+	cout << "Use copy constructor to create stack 2 and pop all the elements" << endl;
+	Stack st1(st); // use copy constructor to create new stack 
+	// pop all the elements from the stack
+	while (!st1.isempty())
+	{
+		st1.pop(po);
+		cout << po << " was popped." << endl;
+	}
+	cout << endl;
+	int b = rand() % 10;// create third stack
+	Stack st2(b); // create the stack of the random size (0-10)
+	cout << "Stack 3 was created. Size = " << b << endl;
+	st2 = st; // use assignement operator 
+	cout << "Assignement operator was used to copy the content of the stack 1 to the stack 2" << endl;
+	cout << "Pop all the elements from the stack 3" << endl;
+	while (!st2.isempty())
+	{
+		st2.pop(po);
+		cout << po << " was popped." << endl;
+	}
+	return 0;
+}

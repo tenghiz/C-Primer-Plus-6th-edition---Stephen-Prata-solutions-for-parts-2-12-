@@ -1,0 +1,107 @@
+// 12.6 - bank.cpp
+// The Bank of Heather would like to know what would happen if it added a second ATM.
+
+// Solution proposed by oleksii savochkin (github)
+
+#include <iostream>
+#include <cstdlib> // for rand() and srand()
+#include <ctime> // for time()
+#include "queue.h"
+
+const int MIN_PER_HR = 60;
+
+// x = average time, in minutes, between customers
+// return value is true if customer shows up this minute
+bool newcustomer(double x)
+{
+	return (std::rand() * x / RAND_MAX < 1);
+}
+
+using namespace std;
+
+int main()
+{
+	cout << "Case Study: Bank of Heather Automatic Teller\n\n";
+	cout << "This program calculates an average value of customers per hour\nthat leads to an average wait time of 1 minunte" << endl;
+	std::srand(std::time(0)); // random initializing of rand()
+	cout << "Simulation hours are set for 100h" << endl;
+	int hours = 100; // hours of simulation
+	long cyclelimit = MIN_PER_HR * hours;
+	int qs; // queue size
+	int qs_max;
+	cout << "Enter maximum size of queue: ";
+	cin >> qs_max;
+	cout << "Enter the maximal number of customers per hour: ";
+	double max_perhour; 
+	cin >> max_perhour;
+	cout << endl;
+	for (qs = 1; qs < qs_max; qs++) // start from 1 person in queue
+	{
+		Queue line(qs); // line queue holds up to qs people
+		Queue line1(qs); // line queue for the second ATM
+		int perhour; // average # of arrival per hour
+		for (perhour = 1; perhour < max_perhour; perhour++) // start from 1 customer per hour
+		{
+			Item temp; // new customer data
+			long turnaways = 0; // turned away by full queue
+			long customers = 0; // joined the queue
+			long served = 0; // served during the simulation
+			long sum_line = 0; // cumulative line length
+			int wait_time = 0; // time until 1st autoteller is free
+			int wait_time1 = 0; // time until 2nd autoteller is free
+			long line_wait = 0; // cumulative time in line
+			
+			double min_per_cust = MIN_PER_HR / perhour; // average time between arrivals
+			for (int cycle = 0; cycle < cyclelimit; cycle++)
+			{
+				if (line1.isfull() && line1.isfull()) // if both lines are full, customer will turn away
+					turnaways++;
+					else
+					{
+						customers++;
+						temp.set(cycle); // cycle = time of arrival
+						if (line.queuecount() >= line1.queuecount()) // if line2 is longer than line2
+							line1.enqueue(temp); // then bring customer to line 2 since it's shorter
+						else
+							line.enqueue(temp); // if otherwise, he'll join line 1
+					}
+				if (wait_time <= 0 && !line.isempty())
+				{
+					line.dequeue(temp); // attend next customer
+					wait_time = temp.ptime(); // for wait_time minutes
+					line_wait += cycle - temp.when();
+					served++;
+				}
+				if (wait_time > 0)
+					wait_time--;
+				sum_line += line.queuecount();
+				if (wait_time1 <= 0 && !line1.isempty())
+				{
+					line1.dequeue(temp); // attend next customer
+					wait_time1 = temp.ptime(); // for wait_time minutes
+					line_wait += cycle - temp.when();
+					served++;
+				}
+				if (wait_time1 > 0)
+					wait_time1--;
+				sum_line += line1.queuecount();
+			}
+			double awt = line_wait / served; // average wait time
+			if (awt == 1) // set average waiting time 
+			{
+				cout << "Queue size: " << qs << endl;
+				cout << "Number of customers per hour: " << perhour << endl;
+				cout << "customers accepted: " << customers << endl;
+				cout << " customers served: " << served << endl;
+				cout << " turnaways: " << turnaways << endl;
+				cout << "average queue size: ";
+				cout.precision(2);
+				cout.setf(ios_base::fixed, ios_base::floatfield);
+				cout << (double)sum_line / cyclelimit << endl;
+				cout << endl;
+			}
+		}
+	}
+	cout << "Done!\n";
+	return 0;
+}

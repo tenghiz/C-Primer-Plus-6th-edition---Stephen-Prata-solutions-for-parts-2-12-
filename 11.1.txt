@@ -1,0 +1,84 @@
+// This program doesn't include any new member or friend function,
+// therefore *.h and *.cpp file are not listed
+
+// 11.1 - Random walk - Save output to a txt file
+
+// This program doesn't need any additional friend function.
+// friend std::ostream & operator<<(std::ostream & os, const Vector & v) can be used to 
+// take OFSTREAM (strangely!) object as an argument.
+
+// Though OFSTREAM object is not OSTREAM object, this program works well
+
+#include <iostream>
+#include <cstdlib> // rand(), srand() prototypes
+#include <ctime> // time() prototype
+#include "vect.h"
+#include <fstream> 
+
+int main()
+{
+	using namespace std;
+
+	// This part creats OFSTREAM object and opens a file for output
+	cout << "Please enter the name of the file: ";
+	char filename[50];
+	cin >> filename;
+	ofstream outFile;
+	outFile.open(filename);
+
+	// Create VECTOR object
+	using VECTOR::Vector;
+	srand(time(0)); // seed random-number generator
+	double direction;
+	Vector step;
+	Vector result(0.0, 0.0);
+	unsigned long steps = 0;
+	double target;
+	double dstep;
+	cout << "Enter target distance (q to quit): ";
+	while (cin >> target)
+	{
+		cout << "Enter step length: ";
+		if (!(cin >> dstep))
+			break;
+
+		// Write to txt file
+		outFile << "Target distance: " << target << ", Step size: " << dstep << endl;
+
+		while (result.magval() < target)
+		{
+			// Write to txt file the coordiantes after each step
+			outFile << steps << ": " << result << endl;
+
+			direction = rand() % 360;
+			step.reset(dstep, direction, Vector::POL);
+			result = result + step;
+			steps++;
+		}
+		cout << "After " << steps << " steps, the subject "
+			"has the following location:\n";
+		cout << result << endl;
+		result.polar_mode();
+		cout << " or\n" << result << endl;
+		cout << "Average outward distance per step = "
+			<< result.magval() / steps << endl;
+
+		// Repeat the same sequence for the txt file
+		outFile << "After " << steps << " steps, the subject "
+			"has the following location:\n";
+		outFile << result << endl;// The rsult will be in POLAR mode
+		result.rect_mode(); // don't forget to flip back to RECT mode
+		outFile << " or\n" << result << endl;
+		outFile << "Average outward distance per step = "
+			<< result.magval() / steps << endl;
+
+		steps = 0;
+		result.reset(0.0, 0.0);
+		cout << "Enter target distance (q to quit): ";
+	}
+	cout << "Bye!\n";
+	cin.clear();
+	while (cin.get() != '\n')
+		continue;
+	return 0;
+}
