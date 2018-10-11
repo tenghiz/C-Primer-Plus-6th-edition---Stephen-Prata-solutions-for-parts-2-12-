@@ -1,0 +1,18 @@
+//2.6 - light year to astronomical unit
+
+#include <iostream>
+
+void ly_to_au(float ly)
+{
+	printf("%.1f light years is %.f astonomical units\n", ly, 63240 * ly);
+}
+
+int main()
+{
+	using namespace std;
+	cout << "Enter the number of light years: ";
+	float light_year;
+	cin >> light_year;
+	ly_to_au(light_year);
+	return 0;
+}

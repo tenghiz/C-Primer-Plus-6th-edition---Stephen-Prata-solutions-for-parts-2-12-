@@ -1,0 +1,24 @@
+//2.5 - celsius to fahrenheit
+
+#include <iostream>
+using namespace std;
+
+void c_to_f(int start, int finish)
+{
+	for (int c = start; c <= finish; c=c+10)
+	{
+		cout << c << " degrees of Celsius is equal to " << 1.8*c + 32 << " degrees of Fahrenheit.\n";
+	}
+}
+
+int main()
+{
+	int lower_c;
+	int upper_c;
+	cout << "Please enter lower temperature in degrees C: ";
+	cin >> lower_c;
+	cout << "Please enter upper temperature in degrees C: ";
+	cin >> upper_c;
+	c_to_f(lower_c, upper_c);
+	return 0;
+}

@@ -1,0 +1,27 @@
+// 5.1 - Sum of all integers in interval
+
+#include <iostream>
+
+using namespace std;
+int main()
+{
+	int num1, num2;
+	cout << "Please enter first number: ";
+	cin >> num1;
+	cout << "Please enter second number: ";
+	cin >> num2;
+	int sum = 0;
+	if (num1 > num2)// this condition checks whether number 1 is bigger than number 2 and swaps it in case
+	{
+		int temp = num1;
+		num1 = num2;
+		num2 = temp;
+	}
+	for (int i = num1; i < num2+1; i++)
+	{
+		sum = sum + i;
+	}
+	cout << "The sum of all numbers in interval [" << num1
+		<< ", " << num2 << "] is " << sum << endl;
+	return 0;
+}

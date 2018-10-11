@@ -1,0 +1,107 @@
+//6.4 - Another modification
+
+//Finally!!! POINTER ARITHMETICS is very hard to catch.
+
+#include <iostream>
+
+const int strsize = 20;
+
+struct bop {
+	char fullname[strsize]; // real name
+	char title[strsize]; // job title
+	char bopname[strsize]; // secret BOP name
+	int preference; // 0 = fullname, 1 = title, 2 = bopname
+};
+
+using namespace std;
+
+int main()
+{
+	//this part of program creates an array of BOP structures
+	//and fills it with random values
+
+	int members_n = (2+ rand() % 3); // random number of BOP members
+	bop * ps = new bop[members_n];
+	int i, j;
+	for (i = 0; i < members_n; i++) // fill structure using random number generator
+	{
+		int m = (5 + rand() % (strsize - 5)); // random fullname length
+		for (j = 0; j < m; j++)
+		{
+			(ps[i].fullname)[j] = char(65 + rand() % 60); // transform RAND INT to RAND CHAR using typecast
+		}
+		(ps[i].fullname)[m] = '\0'; // add '\0' at the end of name
+		int n = (5 + rand() % (strsize - 5)); // random title length
+		for (j = 0; j < n; j++)
+		{
+			(ps[i].title)[j] = char(65 + rand() % 60);
+		}
+		(ps[i].title)[n] = '\0';
+		int p = (5 + rand() % (strsize - 5)); // random bopname length
+		for (j = 0; j < p; j++)
+		{
+			(ps[i].bopname)[j] = char(65 + rand() % 60);
+		}
+		(ps[i].bopname)[p] = '\0';
+		ps[i].preference = (rand() % 3); // random preference
+	}
+	
+	//This part of program deals with menu
+
+	const int choices_n = 5;
+	const char * choice[choices_n] = { "a.display by name", "b.display by title", 
+		"c.display by bopname", "d.display by preference", "q.quit" };
+	char ch_;
+	while (true)
+	{
+		cout << "Benevolent Order of Programmers Report: " << endl;
+		for (int i = 0; i < choices_n; i++)
+		{
+			cout << choice[i] << endl;
+		}
+		cout << "Enter your choice: ";
+		cin >> ch_;
+		if (ch_ == 'a')
+		{
+			for (i = 0; i < members_n; i++)
+			{
+				cout << "Name of member " << i + 1 << ": ";
+				cout << ps[i].fullname << endl;
+			}
+		}
+		else if (ch_ == 'b')
+		{
+			for (i = 0; i < members_n; i++)
+			{
+				cout << "Title of member " << i + 1 << ": ";
+				cout << ps[i].title << endl;
+			}
+		}
+		else if (ch_ == 'c')
+		{
+			for (i = 0; i < members_n; i++)
+			{
+				cout << "Bopname of member " << i + 1 << ": ";
+				cout << ps[i].bopname << endl;
+			}
+		}
+		else if (ch_ == 'd')
+		{
+			for (i = 0; i < members_n; i++)
+			{
+				cout << "BOP member prefers to be called as ";
+
+				// z is a pointer to pointer to the structure's first member
+				bop *z = &ps[i]; 
+				int q = ((ps[i].preference)*(strsize));
+				char * x = ((char*)z + q);
+				cout << x << endl;
+			}
+		}
+		else if (ch_ == 'q')
+			break;
+		cout << endl;
+	}
+	cout << "Bye!" << endl;
+	return 0;
+}

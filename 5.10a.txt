@@ -1,0 +1,45 @@
+//5.10 - Display asterisk (alternative)
+
+//NEW is used to create a dynamic array which is represented as a 2D-array.
+// Each line of this array is filled with '.' ROWS times terminated with '\n'.
+//Second loop is used to fill corresponding positions of array with '*'.
+
+#include <iostream>
+
+int main()
+{
+	using namespace std;
+	cout << "Enter number of rows: ";
+	int rows;
+	cin >> rows;
+	int z = (rows)*(rows + 1);
+	char * ps = new char[z];
+	int counter = rows;
+	//fill array with points
+	for (int i = 0; i < z; i=i+rows+1)
+	{
+		for (int j = i; j < counter; j++)
+		{
+			ps[j] = '.';
+		}
+		ps[counter] = '\n';
+		counter += (rows + 1);
+	}
+	//substitute points with asterisk
+	counter = rows;
+	int counter1 = 0;
+	for (int i = 0; i < z; i = i + rows + 1)
+	{
+		for (int k = counter-1; k < counter+counter1;k++)
+		{
+			ps[k] = '*';
+		}
+		counter += rows;
+		counter1++;
+	}
+	for (int i = 0; i < z; i++)
+	{
+		cout << ps[i];
+	}
+	return 0;
+}

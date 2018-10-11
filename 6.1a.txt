@@ -1,0 +1,57 @@
+==============C++==================
+//This program uses ASM subroutine, which transforms UPPERCASE==>lowercase and vice versa
+// and also skips digits.
+//Please compare it to pure C++ program:
+//current program inserts SPACE instead of digit, C++ however removes digits without inserting SPACES.
+
+//ASM subroutine cannot be VOID: if content of EAX (modified char) is passed back to [ebp+8],
+// output is the same as input.
+
+
+//6.1 - Read keyboard, skip numbers, transform uppercase to lowercase
+
+#include <iostream>
+
+extern "C" char transform_char(char z);
+
+using namespace std;
+
+int main()
+{
+	char z;
+	while ((z = cin.get())!= '@')
+	{
+		z = transform_char(z);
+		cout << z;
+	}
+	return 0;
+}
+
+=============== ASM ================
+.model flat, C
+
+.data
+
+.code
+transform_char proc
+
+push ebp
+mov ebp, esp
+
+mov eax, [ebp+8]
+cmp eax, 30h
+jb L1
+cmp eax, 39h
+ja L1
+mov eax, 0
+L1:
+.if eax >=41h && eax <= 5ah
+add eax, 20h
+.elseif eax >= 61H && eax <= 7ah
+sub eax, 20h
+.endif
+
+pop ebp
+ret
+transform_char endp
+end

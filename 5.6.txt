@@ -1,0 +1,31 @@
+//5.6 - C++ for Fools - 2D-array
+
+#include <iostream>
+#define months_number 12
+#define years 3
+
+int main()
+{
+	using namespace std;
+	cout << "Please enter monthly sales of the book" << endl;
+	const char * month[months_number] =
+	{
+		"January","February","March","April",
+		"May", "June", "July", "August",
+		"September", "October", "November", "December" };
+	int sales[years][months_number];
+	int sum = 0;
+	for (int j = 0; j < years; j++)
+	{
+		cout << "Year " << j +1 << ": " << endl;
+		for (int i = 0; i < months_number; i++)
+		{
+			cout << "Please enter worth of sales for ";
+			cout << month[i] << ": ";
+			cin >> sales[j][i];
+			sum += sales[j][i];
+		}
+	}
+	cout << "Total sales for " << years << " years: " << sum << endl;
+	return 0;
+}

@@ -1,0 +1,26 @@
+//5.4 - Simple interest vs Compound interest
+
+#include <iostream>
+
+int main()
+{
+	using namespace std;
+	double Daphne_value = 100.0;
+	double Daphne_interest = Daphne_value*0.1;
+	cout << "Daphne's first year interest: " << Daphne_interest << endl;
+	double Cleo_value = 100.0;
+	double Cleo_interest = Cleo_value*0.05;
+	cout << "Cleo's first year interest: " << Cleo_interest << endl;
+	int i = 2;
+	while (Cleo_interest < Daphne_interest)
+	{
+		Daphne_interest += Daphne_value*0.1;
+		cout << "Daphne's " << i << " year interest: ";
+		cout << Daphne_interest << endl;
+		Cleo_interest += (Cleo_value + Cleo_interest)*0.05;
+		cout << "Cleo's " << i << " year interest: ";
+		cout << Cleo_interest << endl;
+		i++;
+	}
+	return 0;
+}

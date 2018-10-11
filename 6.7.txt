@@ -1,0 +1,79 @@
+//6.7 - 
+
+// This program uses 2 loops in order to reiterate prompt message.
+// Outer loop is WHILE(TRUE), inner loops is WHILE(CHAR!='\n'). This condition permits to go out from the loop
+// after output buffer reads '\n'. Inner loop's body also contains IF condition (CHAR!='q'). If 'q' is encountered,
+// Q_COUNTER is set to 1 and BREAK is implemented. Outer loop checks Q-COUNTER, if it is set to 1, then outer loop 
+// is also terminated.
+
+// This program uses set of counters to delimitate first letter of each word (see comments).
+// Vowel array and consonant array are used in order to determine the type of letter.
+// FOR loop permits to make this comparison.
+
+#include <iostream>
+
+const int word_lenghth = 20;
+
+using namespace std;
+
+int main()
+{
+	char vowel_arr[] = {'a', 'e', 'o', 'u', 'i'};
+	int vowel_arr_n = sizeof(vowel_arr) / sizeof(char);
+	char consonant_arr[] = {'q','w','r','t','y','p','m','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m'};
+	int consonant_arr_n = sizeof(consonant_arr) / sizeof(char);
+	while (true)
+	{
+		char z;
+		int vowel = 0;
+		int consonat = 0;
+		int no_letter = 0;
+		int q_counter = 0; // if 'q' is encountered, q_counter = 1, outer loop is terminated
+		int counter = 0;
+		cout << "Enter words (q to quit): ";
+		while ((z = cin.get()) != '\n')
+		{
+			counter++; // counts letters in each word. If precedent symbol is SPACE, counter reset to 0.
+			if (z == 'q')
+			{
+				q_counter++;// set q_counter to 1, break inner loop, break outer loop
+				break;
+			}
+			cout << z;
+			if (z == ' ') // SPACE is used as demarcation sign between words
+				counter = 0;
+			if (counter == 1) // we are interested in first letter of a word
+			{
+				int i;
+				int vowel_conson_counter = 0; // counter is set to 0 if word begins with non-alphabetic sign
+				for (i = 0; i < vowel_arr_n; i++)
+				{
+					if (z == vowel_arr[i])
+					{
+						vowel++;
+						vowel_conson_counter++;
+					}	
+				}
+				for (i = 0; i < consonant_arr_n; i++)
+				{
+					if (z == consonant_arr[i])
+					{
+						consonat++;
+						vowel_conson_counter++;
+					}
+				}
+				if (vowel_conson_counter == 0)
+					no_letter++;
+			}
+		}
+		cout << endl;
+		cout << vowel << " words begin with vowel" << endl;
+		cout << consonat << " words begin with consonat" << endl;
+		cout << "There are " << no_letter << " words which begin with non-alphabetic symbol" << endl;
+		if (q_counter == 1)
+			break;
+		cout << endl;
+	}
+	cout << "Bye!" << endl;
+	return 0;
+}

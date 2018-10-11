@@ -1,0 +1,95 @@
+//6.9 - 
+
+//Please note following modification: cin.getline is used to save line (say name and surname).
+
+#include <iostream>
+#include <fstream>
+#include <cstdlib> // support for exit()
+
+const int name_lenghth = 20;
+const int file_name_length = 30;
+
+struct spri
+{
+	char contrib_name[name_lenghth];
+	double donation;
+};
+
+using namespace std;
+
+int main()
+{
+	// Here user is prompted to fill the form
+	cout << "Society for the Preservation of Rightful Influence is greeting you!" << endl;
+	cout << "Please enter the number of contributors: ";
+	int contributor_n;
+	cin >> contributor_n;
+	spri * ps = new spri[contributor_n];
+	int i;
+	for (i = 0; i < contributor_n; i++)
+	{
+		cout << "Please enter the name of contributor " << i + 1 << " : ";
+		cin.get();
+		cin.getline((ps[i].contrib_name), name_lenghth);
+		cout << "Please enter amount of donation: ";
+		cin >> ps[i].donation;
+		cout << endl;
+	}
+	cout << endl;
+
+	// Create output file
+	cout << "Please enter the name of output file: ";
+	char filename[file_name_length];
+	cin >> filename;
+
+	ofstream outFile; // create object for output
+	outFile.open(filename); // associate with a file
+	
+	// Save information in output file
+	outFile << fixed;
+	outFile.precision(2);
+	outFile.setf(ios_base::showpoint);
+
+	outFile << "Society for the Preservation of Rightful Influence" << endl;
+	outFile << "==================================================" << endl;
+	outFile << endl;
+	outFile << "Number of contributors: ";
+	outFile << contributor_n << endl;
+	outFile << endl;
+	for (i = 0; i < contributor_n; i++)
+	{
+		outFile << ps[i].contrib_name << " : ";
+		outFile << ps[i].donation << endl;
+		outFile << endl;
+	}
+	outFile << "===================== END ========================" << endl;
+	outFile.close();
+
+	//display content of file
+	ifstream inFile; // object for handling file input
+	inFile.open(filename); // associate inFile with a file
+	if (!inFile.is_open()) // failed to open file
+	{
+		cout << "Could not open the file " << filename << endl;
+		cout << "Program terminating.\n";
+		exit(EXIT_FAILURE);
+	}
+	cout << endl;
+	char value;
+	inFile.get(value); // IFSTREAM object inFile + method GET
+	while (inFile.good()) // while input good and not at EOF
+	{
+		cout << value;
+		inFile.get(value);
+	}
+	cout << endl;
+	if (inFile.eof())
+		cout << "End of file reached.\n";
+	else if (inFile.fail())
+		cout << "Input terminated by data mismatch.\n";
+	else
+		cout << "Input terminated for unknown reason.\n";
+	inFile.close(); // finished with the file
+
+	return 0;
+}

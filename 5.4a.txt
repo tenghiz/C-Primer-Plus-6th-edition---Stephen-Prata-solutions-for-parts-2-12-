@@ -1,0 +1,109 @@
+===================== C++ ======================
+//5.4 - Simple interest vs Compound interest (ASM)
+
+//Here FLOAT is used instead of DOUBLE, because FLOAT = REAL4 = 32-bit
+
+#include <iostream>
+
+extern "C" void interest(float * arr, float Daphne_value, float Daphne_interest, float Cleo_value, float Cleo_interest);
+
+int main()
+{
+	using namespace std;
+	float Daphne_value = 100.0;
+	float Daphne_interest = 0.1;
+	float Cleo_value = 100.0;
+	float Cleo_interest = 0.05;
+	float arr[3];// this array keeps years, sum of Daphne's interest and sum of Cleo's interest
+	interest(arr, Daphne_value, Daphne_interest, Cleo_value, Cleo_interest);
+	cout << "It takes " << arr[0] << " years for the value of Cleo's investment "
+		<< "to exceed the value of Daphne's investment" << endl;
+	cout << "Sum of Daphne's interest: " << arr[1] << endl;
+	cout << "Sum of Cleo's interest: " << arr[2] << endl;
+	return 0;
+}
+
+============================== ASM =======================
+; FPU cannot use general purpose registers as operands
+; FLOAT values must be saved in memory prior to be loaded to FPU
+
+.model flat, C
+
+.data
+
+Daphne_value real4 0.0
+Daphne_interest real4 0.0
+Daphne_sum real4 0.0
+Cleo_value real4 0.0
+Cleo_interest real4 0.0
+Cleo_sum real4 0.0
+year real4 0.0
+year1 dword 0
+
+.code
+interest proc
+
+push ebp
+mov ebp, esp
+
+mov eax, [ebp + 12]; Daphne_value
+mov Daphne_value, eax
+mov eax, [ebp + 16]; Daphne_interest
+mov Daphne_interest, eax
+mov eax, [ebp + 20]; Cleo_value
+mov Cleo_value, eax
+mov eax, [ebp + 24]; Cleo_interest
+mov Cleo_interest, eax
+
+L1:
+finit
+
+; calculate Daphne's interest
+fld Daphne_value
+fld Daphne_interest
+fmul
+fld Daphne_sum
+fadd
+fstp Daphne_sum
+
+; calculate Cleo's interest
+fld Cleo_value
+fld Cleo_sum
+fadd
+fld Cleo_interest
+fmul
+fld Cleo_sum
+fadd
+fstp Cleo_sum
+
+inc year1
+
+;compare interests
+fld Daphne_sum
+fld Cleo_sum
+fcomi ST(0), ST(1)
+ja quit
+
+jmp L1
+
+quit:
+
+;transform INT YEAR1 to FLOAT YEAR
+
+fild year1
+fst year
+
+mov esi, [ebp + 8]; arr
+mov eax, year
+mov [esi], eax
+add esi, 4
+mov eax, Daphne_sum
+mov[esi], eax
+add esi, 4
+mov eax, Cleo_sum
+mov[esi], eax
+
+pop ebp
+ret
+interest endp
+end

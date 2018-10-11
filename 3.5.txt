@@ -1,0 +1,18 @@
+//3.5 - World population
+
+#include <iostream>
+
+int main()
+{
+	using namespace std;
+	cout << "Enter the world's population: ";
+	long long population;
+	cin >> population;
+	cout << "Enter China's population: ";
+	long China_pop;
+	cin >> China_pop;
+	cout << "The population of China is "
+		<< 100 * ((double)China_pop / (double)population) <<
+		" % of the world population" << endl;
+	return 0;
+}

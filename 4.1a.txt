@@ -1,0 +1,128 @@
+======================= C++ code =====================
+// 4.1 
+
+// #define string_length 20
+
+//struct person
+//{
+//	char first_name[string_length];
+//	char last_name[string_length];
+//	char grade;
+//	int age;
+//};
+
+extern "C" void asm_main();
+int main()
+{
+	asm_main();
+	return 0;
+}
+
+========================= ASM code ======================
+
+; The volume of STRUCT PERSON(see C++ code)
+; is 20 + 20 + 1 + 4 = 45 bytes.It must be aligned to whole number of bytes, == > 48 bytes(6x8).
+
+; This program uses SCANF as input function.Please avoid to use "%c" qualifier.
+; In this case program writes to memory buffer content which remains from previous input, namely 0ah.
+; Use "%s" instead.
+
+; Please be careful using PRINTF with digits(i.e. "%d" qualifier).
+; If passed parameter is memory block address which contains some number,
+;PRINTF will print address, not number itself.
+
+.586
+.model flat, C
+
+malloc proto,
+size_t: dword
+
+free proto,
+pMemory: dword
+
+printf proto,
+pString: ptr byte,
+args:vararg
+
+scanf PROTO, 
+pFormat:PTR BYTE,
+pBuffer:PTR BYTE, 
+args:VARARG
+
+BUFFER_SIZE = 48
+
+.data
+
+pointer_to_memory dword 0
+current_pointer dword 0
+
+prompt1 db "What is your name?",0
+prompt2 db "What is your familyname?", 0
+prompt3 db "What letter grade do you deserve?",0
+prompt4 db "What is your age?", 0
+
+crlf db 0dh, 0ah, 0
+
+scanf_s db "%s", 0
+scanf_d db "%d", 0
+
+printf_d db "%d", 0
+
+.code
+
+asm_main proc
+
+;allocate memory
+invoke malloc, BUFFER_SIZE
+mov pointer_to_memory, eax
+mov current_pointer, eax
+
+invoke printf, addr prompt1
+invoke scanf, addr scanf_s, pointer_to_memory
+
+;Following STRUCT PERSON declarartion in C++, the length of NAME is 20 bytes
+;Adjust pointer:
+add current_pointer, 20d
+
+invoke printf, addr prompt2
+invoke scanf, addr scanf_s, current_pointer
+
+; Adjust pointer :
+add current_pointer, 20d
+
+invoke printf, addr prompt3
+invoke scanf, addr scanf_s, current_pointer
+
+; Adjust pointer :
+add current_pointer, 4; add whole byte
+
+invoke printf, addr prompt4
+invoke scanf, addr scanf_d, current_pointer
+
+;Write memory content on console:
+
+invoke printf, addr crlf
+invoke printf, pointer_to_memory
+invoke printf, addr crlf
+mov eax, pointer_to_memory
+mov current_pointer, eax
+add current_pointer, 20d
+invoke printf, current_pointer
+invoke printf, addr crlf
+add current_pointer, 20d
+invoke printf, current_pointer
+invoke printf, addr crlf
+add current_pointer, 4
+mov eax, current_pointer
+mov ebx, [eax]
+invoke printf, addr printf_d, ebx
+; invoke printf, addr printf_d, current_pointer; in this case PRINTF will print address of memory block
+invoke printf, addr crlf
+
+;free memory
+mov eax, pointer_to_memory; pass pointer value to free
+invoke free, eax
+
+ret
+asm_main ENDP
+END

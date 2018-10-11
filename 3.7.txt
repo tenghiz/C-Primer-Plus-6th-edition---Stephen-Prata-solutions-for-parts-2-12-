@@ -1,0 +1,16 @@
+// 3.7 - European style to US style
+
+#include <iostream>
+
+int main()
+{
+	using namespace std;
+	const double ml_in_hund_km = 62.14;
+	const double litres_in_gallon = 3.875;
+	cout << "Please enter your average consumption in liters per 100 km: ";
+	double l_km;
+	cin >> l_km;
+	cout << "Your average consumption in miles per gallon is " <<
+		(ml_in_hund_km*litres_in_gallon )/ l_km << " mpg\n";
+	return 0;
+}

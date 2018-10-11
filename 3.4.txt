@@ -1,0 +1,26 @@
+//3.4 - Seconds to days
+
+#include <iostream>
+
+int main()
+{
+	using namespace std;
+	const int sec_in_min = 60;
+	const int min_in_hr = 60;
+	const int hr_in_day = 24;
+	cout << "Enter the number of seconds: ";
+	long sec;
+	cin >> sec;
+	int days = (int)sec / (sec_in_min*min_in_hr*hr_in_day);
+	cout << days << " days," << endl;
+	int remainder;
+	remainder = sec % (sec_in_min*min_in_hr*hr_in_day);
+	int hours = remainder/ (sec_in_min*min_in_hr);
+	cout << hours << " hours," << endl;
+	remainder = remainder % (sec_in_min*min_in_hr);
+	int minutes = remainder / sec_in_min;
+	cout << minutes << " minutes," << endl;
+	int seconds = remainder%sec_in_min;
+	cout << seconds << " seconds." << endl;
+	return 0;
+}

@@ -1,0 +1,24 @@
+//4.10 - 
+
+#include <iostream>
+#define arr_length 3
+
+int main()
+{
+	using namespace std;
+	double *ps = new double[arr_length];
+	int i;
+	for (i = 0; i < arr_length; i++)
+	{
+		cout << "Enter time: ";
+		cin >> *(ps + i);
+	}
+	double average = 0;
+	for (i = 0; i < arr_length; i++)
+	{
+		average = average + *(ps + i);
+	}
+	cout << "Average is ";
+	cout << average / arr_length << endl;
+	return 0;
+}

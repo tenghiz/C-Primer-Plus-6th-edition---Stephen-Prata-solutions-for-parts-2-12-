@@ -1,0 +1,17 @@
+//3.1 - Height cm to inches
+
+#include <iostream>
+
+int main()
+{
+	using namespace std;
+	const double cm_in_inch = 2.55;
+	cout << "Please enter your height in cm: ___\b\b\b";
+	int height;
+	cin >> height;
+	cout << "Your height is ";
+	cout << (double)height / cm_in_inch << " inches\n";
+	height = (double)height / cm_in_inch;
+	cout << height << " inches\n";
+	return 0;
+}

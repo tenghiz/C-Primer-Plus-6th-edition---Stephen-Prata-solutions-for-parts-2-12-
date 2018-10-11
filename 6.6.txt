@@ -1,0 +1,62 @@
+//6.6 - 
+
+#include <iostream>
+
+const int name_lenghth = 20;
+
+struct spri
+{
+	char contrib_name[name_lenghth];
+	double donation;
+};
+
+using namespace std;
+
+int main()
+{
+	cout << "Society for the Preservation of Rightful Influence is greeting you!" << endl;
+	cout << "Please enter the number of contributors: ";
+	int contributor_n;
+	cin >> contributor_n;
+	spri * ps = new spri[contributor_n];
+	int i;
+	for (i = 0; i < contributor_n; i++)
+	{
+		cout << "Please enter the name of contributor " << i+1 << " : ";
+		cin >> ps[i].contrib_name;
+		cout << "Please enter amount of donation: ";
+		cin >> ps[i].donation;
+		cout << endl;
+	}
+	cout << "Grand Patrons" << endl;
+	int counter = 0;
+	for (i = 0; i < contributor_n; i++)
+	{
+		
+		if (ps[i].donation >= 10000)
+		{
+			cout << ps[i].contrib_name << " : ";
+			cout << ps[i].donation << endl;
+			counter++;
+		}
+	}
+	if (counter == 0)
+		cout << "None" << endl;
+	counter = 0;
+	cout << endl;
+	cout << "Patrons" << endl;
+	for (i = 0; i < contributor_n; i++)
+	{
+
+		if (ps[i].donation < 10000)
+		{
+			cout << ps[i].contrib_name << " : ";
+			cout << ps[i].donation << endl;
+			counter++;
+		}
+	}
+	if (counter == 0)
+		cout << "None" << endl;
+	cout << endl;
+	return 0;
+}

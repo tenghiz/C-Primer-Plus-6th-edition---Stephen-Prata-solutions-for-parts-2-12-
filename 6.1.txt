@@ -1,0 +1,22 @@
+//6.1 - Read keyboard, skip numbers, transform uppercase to lowercase
+
+#include <iostream>
+#include <cctype>
+
+using namespace std;
+
+int main()
+{
+	char z;
+	while ((z = cin.get()) != '@')
+	{
+		if (isdigit(z))
+			continue;
+		else if (isupper(z))
+			z = (tolower(z));
+		else if (islower(z))
+			z = (toupper(z));
+		cout << z;
+	}
+	return 0;
+}

@@ -1,0 +1,71 @@
+===================== C++ ========================
+//5.10 - Display asterisk (ASM)
+
+// Array is filled with sequence '.' - '*' - '\n'
+
+#include <iostream>
+
+extern "C" void asterisk_array(char * ps, int rows);
+
+int main()
+{
+	using namespace std;
+	cout << "Enter number of rows: ";
+	int rows;
+	cin >> rows;
+	int z = (rows)*(rows + 1);
+	char * ps = new char[z];
+	asterisk_array(ps, rows);
+	for (int i = 0; i < z; i++)
+	{
+		cout << ps[i];
+	}
+	return 0;
+}
+
+=================== ASM =====================
+
+.model flat, C
+
+.data
+
+.code
+asterisk_array proc
+
+push ebp
+mov ebp, esp
+
+mov edx, 0; counter for '.'
+mov ebx, 1; counter for '*'
+mov esi, [ebp + 8]; pointer to array
+mov ecx, [ebp + 12]; rows
+L1:
+mov edx, ecx
+push ecx
+mov ecx, edx
+dec ecx
+cmp ecx, 0
+je L4
+L2 : ;fill stroke with '.'
+mov al, '.'
+mov byte ptr [esi], al
+inc esi
+loop L2
+L4:
+mov ecx, ebx
+L5 : ;fill remaining positions with '*'
+mov al, '*'
+mov byte ptr [esi], al
+inc esi
+loop L5
+mov al, 0ah; add ENTER at the end of the stroke
+mov byte ptr [esi], al
+inc esi
+inc ebx
+pop ecx
+loop L1
+
+pop ebp
+ret
+asterisk_array endp
+end

@@ -1,0 +1,30 @@
+//6.2 - 
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	const int arr_leng = 10;
+	double arr[arr_leng];
+	int i = 0;
+	double sum = 0;
+	cout << "Please enter number: ";
+	while (i < arr_leng&&cin >> arr[i])
+	{
+		sum += arr[i];
+		i++;
+		cout << "Please enter number: ";
+	}
+	double average = sum / i;
+	cout << "Average is " << average << endl;
+	int count = 0;
+	for (int j = 0; j < i; j++)
+	{
+		if (arr[j] > average)
+			count++;
+	}
+	cout << count << " numbers are bigger than average" << endl;
+	return 0;
+}

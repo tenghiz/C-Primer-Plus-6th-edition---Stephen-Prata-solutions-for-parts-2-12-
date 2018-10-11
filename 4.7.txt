@@ -1,0 +1,100 @@
+// 4.7 - William Wingate runs a pizza-analysis service
+
+===================== C++ code =====================
+//4.7 - William Wingate runs a pizza-analysis service
+
+extern "C" void asm_main();
+
+int main()
+{
+	asm_main();
+	return 0;
+}
+
+======================== ASM code ==================
+
+; 4.7 - William Wingate runs a pizza - analysis service
+
+; Please pay attention to arguments passed to SCANF and PRINTF.
+; Second argument of SCANF must be preceded by ADDR, otherwise error is generated.
+; When writing out structure content on console, second argument of PRINTF should not contain ADDR,
+; otherwise address of cell is printed.
+
+.586
+.model flat, C
+
+printf proto,
+pString: ptr byte,
+args:vararg
+
+scanf PROTO, 
+pFormat:PTR BYTE,
+pBuffer:PTR BYTE, 
+args:VARARG
+
+array_length = 20
+
+pizza struct
+firm byte array_length dup(0)
+diameter dword 0
+weight dword 0
+pizza ends
+
+quantity = 2
+
+.data
+
+prompt1 db "Company name?",0
+prompt2 db "Diameter?", 0
+prompt3 db "Weight?",0
+
+crlf db 0dh, 0ah, 0
+
+scanf_s db "%s", 0
+scanf_d db "%d", 0
+
+printf_d db "%d", 0
+
+analysis pizza quantity dup (<>)
+
+.code
+
+asm_main proc
+
+lea esi, analysis
+mov ecx, quantity
+L1:
+push ecx
+invoke printf, addr prompt1
+invoke scanf, addr scanf_s, addr (pizza ptr[esi]).firm
+add esi, array_length
+invoke printf, addr prompt2
+invoke scanf, addr scanf_d, addr (pizza ptr[esi]).diameter
+add esi, type pizza.diameter
+invoke printf, addr prompt3
+invoke scanf, addr scanf_d, addr (pizza ptr[esi]).weight
+add esi, type pizza.weight
+pop ecx
+loop L1
+
+invoke printf, addr crlf
+
+lea esi, analysis
+mov ecx, quantity
+L2 :
+push ecx
+invoke printf, addr (pizza ptr[esi]).firm
+invoke printf, addr crlf
+add esi, array_length
+invoke printf, addr printf_d, (pizza ptr[esi]).diameter
+invoke printf, addr crlf
+add esi, type pizza.diameter
+invoke printf, addr printf_d, (pizza ptr[esi]).weight
+invoke printf, addr crlf
+add esi, type pizza.weight
+pop ecx
+loop L2
+
+ret
+asm_main ENDP
+END

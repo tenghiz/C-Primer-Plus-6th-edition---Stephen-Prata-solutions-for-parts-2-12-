@@ -1,0 +1,54 @@
+// 6.8 - Read char-by-char from .txt file
+
+// Textbook's Listing 6.16 sumafile.cpp proposes following method for the reading from file:
+//
+// double value;
+// inFile >> value; // get first value
+//while (inFile.good()) // while input good and not at EOF
+//{
+//	inFile >> value; // get next value
+//}
+//
+//This method reads only DOUBLE digits, so variable VALUE must be of CHAR type.
+// As author mentions, IFSTREAM object (here named inFile) is a full equivalent of ISTREAM cin.
+// Also, this object cannot read whitespace characters, so cosnole output will contain any space, tab or '\n'.
+// IFSTREAM object can be modified by .get or .getline method, in this case it will be able to read all whitespace chars.
+
+#include <iostream>
+#include <fstream> // file I/O support
+#include <cstdlib> // support for exit()
+
+const int SIZE = 60;
+
+int main()
+{
+	using namespace std;
+	char filename[SIZE];
+	ifstream inFile; // object for handling file input
+	cout << "Enter name of data file: ";
+	cin.getline(filename, SIZE);
+	inFile.open(filename); // associate inFile with a file
+	if (!inFile.is_open()) // failed to open file
+	{
+		cout << "Could not open the file " << filename << endl;
+		cout << "Program terminating.\n";
+		exit(EXIT_FAILURE);
+	}
+	cout << endl;
+	char value;
+	inFile.get(value); // IFSTREAM object inFile + method GET
+	while (inFile.good()) // while input good and not at EOF
+	{
+		cout << value;
+		inFile.get(value);
+	}
+	cout << endl;
+	if (inFile.eof())
+		cout << "End of file reached.\n";
+	else if (inFile.fail())
+		cout << "Input terminated by data mismatch.\n";
+	else
+		cout << "Input terminated for unknown reason.\n";
+	inFile.close(); // finished with the file
+	return 0;
+}

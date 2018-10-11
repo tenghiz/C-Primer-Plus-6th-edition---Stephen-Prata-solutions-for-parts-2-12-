@@ -1,0 +1,19 @@
+//5.8 - Enter words
+
+#include <iostream>
+#include <cstring>
+
+int main()
+{
+	using namespace std;
+	cout << "Enter words (to stop, type the word 'done'): ";
+	char word_[20];
+	int counter = 0;
+	do
+	{
+		cin >> word_;
+		counter++;
+	} while (strcmp(word_, "done") != 0);
+	cout << "You've entered " << counter -1 << " words." << endl;
+	return 0;
+}

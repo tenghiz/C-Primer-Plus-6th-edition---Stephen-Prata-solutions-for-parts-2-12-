@@ -1,0 +1,36 @@
+//4.6 - 
+
+#include <iostream>
+
+struct CandyBar
+{
+	char brand[20];
+	double weight;
+	int kal;
+};
+
+int main()
+{
+	using namespace std;
+	const int quantity = 3;
+	CandyBar snack[quantity];
+	int i;
+	for (i = 0; i < quantity; i++)
+	{
+		cout << "Brand? ";
+		cin >> snack[i].brand;
+		cout << "Weight? ";
+		cin >> snack[i].weight;
+		cout << "Kalories? ";
+		cin >> snack[i].kal;
+		cout << "=============" << endl;
+	}
+	for (i = 0; i < quantity; i++)
+	{
+		cout << snack[i].brand << endl;
+		cout << snack[i].weight << endl;
+		cout << snack[i].kal << endl;
+		cout << "=============" << endl;
+	}
+	return 0;
+}

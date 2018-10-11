@@ -1,0 +1,26 @@
+//5.5 - C++ for Fools
+
+#include <iostream>
+#define months_number 12
+
+int main()
+{
+	using namespace std;
+	cout << "Please enter monthly sales of the book" << endl;
+	const char * month[months_number] =
+	{
+		"January","February","March","April",
+		"May", "June", "July", "August",
+		"September", "October", "November", "December" };
+	int sales[months_number];
+	int sum = 0;
+	for (int i = 0; i < months_number; i++)
+	{
+		cout << "Please enter worth of sales for ";
+		cout << month[i] << ": ";
+		cin >> sales[i];
+		sum += sales[i];
+	}
+	cout << "Total sales for the year: " << sum << endl;
+	return 0;
+}

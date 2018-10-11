@@ -1,0 +1,19 @@
+//5.3 - Type in numbers and sum it
+
+#include <iostream>
+
+int main()
+{
+	using namespace std;
+	int sum = 0;
+	int num;
+	do
+	{
+		cout << "Please enter any number, '0' if you want exit: ";
+		cin >> num;
+		sum += num;
+	} while (num != 0);
+	cout << "The sum of all numbers is ";
+	cout << sum << endl;
+	return 0;
+}

@@ -1,0 +1,25 @@
+//3.2 - BMI
+
+#include <iostream>
+
+int main()
+{
+	using namespace std;
+	const double cm_in_inch = 2.54;
+	const int inch_in_foot = 12;
+	const double pound_in_kg = 2.2;
+	cout << "Please enter your height in ft and inches\n";
+	cout << "ft: ";
+	int ft;
+	cin >> ft;
+	cout << "inch: ";
+	int inch;
+	cin >> inch;
+	double height = (double)(ft*inch_in_foot + inch)*cm_in_inch/100;
+	cout << "Please enter your weight in pounds: ";
+	int pounds;
+	cin >> pounds;
+	double weight = (double)pounds / pound_in_kg;
+	cout << "Your BMI is " << weight / (height *height) << endl;
+	return 0;
+}

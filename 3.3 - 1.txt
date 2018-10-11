@@ -1,0 +1,44 @@
+//3.3 - Latitude in decimal (inline ASM)
+
+double latitude(int deg, int min, int sec)
+{
+	const int sec_in_deg = 3600;
+	const int min_in_deg = 60;
+	double lat;
+	__asm 
+	{
+		finit
+		fild sec
+		fild sec_in_deg
+		fdiv; sec (st1) is divided by sec_in_deg (st0)
+		fild min
+		fild min_in_deg
+		fdiv; min(st1) is divided by min_in_deg(st0)
+		fild deg; now st(0) is deg, st(1) is min, st(2) is sec
+		fadd
+		fadd
+		fst lat
+	}
+	return lat;
+}
+
+#include <iostream>
+
+int main()
+{
+	using namespace std;
+	cout << "Enter a latitude in degrees, minutes, and seconds\n";
+	cout << "Degrees: ";
+	int deg;
+	cin >> deg;
+	cout << "Minutes: ";
+	int min;
+	cin >> min;
+	cout << "Seconds: ";
+	int sec;
+	cin >> sec;
+	cout << "Latitude is ";
+	double lat_dec = latitude(deg, min, sec);
+	cout << lat_dec << " degrees\n";
+	return 0;
+}

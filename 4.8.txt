@@ -1,0 +1,29 @@
+// 4.8 - 
+
+#include <iostream>
+#define name_length 20
+
+struct pizza
+{
+	char company[name_length];
+	int diameter;
+	int weight;
+};
+
+int main()
+{
+	using namespace std;
+	pizza *ps = new pizza;
+	cout << "Diameter? ";
+	cin >> ps->diameter;
+	cin.get();
+	cout << "Company? ";
+	cin.getline(ps->company, name_length);
+	cout << "Weight? ";
+	cin >> (*ps).weight;
+	cout << endl;
+	cout << ps->company << endl;
+	cout << ps->diameter << endl;
+	cout << ps->weight << endl;
+	return 0;
+}

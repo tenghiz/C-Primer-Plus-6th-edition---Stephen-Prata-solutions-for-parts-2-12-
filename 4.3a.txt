@@ -1,0 +1,28 @@
+//4.3 - C-string concatenation (using pointers)
+
+// Though gives desired result, this program provokes error message
+
+#include <iostream>
+#include <cstring>
+
+int main()
+{
+	using namespace std;
+	char fname[10];
+	char lname[30];
+	cout << "Enter your first name: ";
+	cin >> fname;
+	cout << "Enter your last name: ";
+	cin >> lname;
+	int z = strlen(lname);
+	lname[z] = ',';
+	z = z + 1;
+	lname[z] = ' ';
+	z = z + 1;
+	char *ps = lname;
+	ps = ps + z;
+	strcpy_s(ps, strlen(lname) - z, fname);
+	cout << "In a single string: ";
+	cout << lname << endl;
+	return 0;
+}

@@ -1,0 +1,33 @@
+//6.3 - 
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	const int choices_n = 5;
+	const char * choice[choices_n] = { "c) Carnivore", "p) Pianist", "t) Tree", "g) Game", "f) " };
+	char ch;
+	while (true)
+	{
+		cout << "Please enter one of the following choices: " << endl;
+		for (int i = 0; i < choices_n; i++)
+		{
+			cout << choice[i] << endl;
+		}
+		cin >> ch;
+		if (ch == 'c')
+			cout << "Lion is a carnivore" << endl;
+		else if (ch == 'p')
+			cout << "My dad is a pianist" << endl;
+		else if (ch == 't')
+			cout << "Maple is a tree" << endl;
+		else if (ch == 'g')
+			cout << "Chess is a game" << endl;
+		else if (ch == 'f')
+			break;
+		cout << endl;
+	}
+	return 0;
+}

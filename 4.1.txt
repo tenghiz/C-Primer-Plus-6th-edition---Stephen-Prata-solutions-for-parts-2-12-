@@ -1,0 +1,43 @@
+//4.1 - Request and display information
+
+#include <iostream>
+#define string_length 20
+
+struct person
+{
+	char first_name[string_length];
+	char last_name[string_length];
+	char grade;
+	int age;
+};
+
+void question(person *ps)
+{
+	using namespace std;
+	cout << "What is your first name? ";
+	cin.getline(ps->first_name, string_length);
+	cout << "What is your last name? ";
+	cin.getline((*ps).last_name, string_length);
+	cout << "What letter grade do you deserve? ";
+	cin.get(ps->grade);
+	cout << "What is your age? ";
+	cin >> ps->age;
+}
+
+void answer(person *ps)
+{
+	using namespace std;
+	cout << "Name: " << (*ps).last_name << ", " << ps->first_name << endl;
+	ps->grade = ps->grade + 1;
+	cout << "Grade: " << ps->grade << endl;
+	cout << "Age: " << ps->age << endl;
+}
+
+int main()
+{
+	using namespace std;
+	person *ps = new person;
+	question(ps);
+	answer(ps);
+	return 0;
+}

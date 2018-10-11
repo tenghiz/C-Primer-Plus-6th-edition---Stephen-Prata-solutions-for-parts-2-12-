@@ -1,0 +1,107 @@
+Using linked list for dynamic allocation of array of structures
+
+============ C++ ===========
+// 4.9 - Create a pointer to an array of structures
+// Dynamical allocation using linked list
+
+extern "C" void asm_main();
+
+int main()
+{
+	asm_main();
+	return 0;
+}
+
+===========ASM =============
+
+; 4.9 - Dynamic allocation of array of structures
+;Linked list
+
+.586
+.model flat, C
+
+malloc proto,
+size_t: dword
+
+free proto,
+pMemory: dword
+
+printf proto,
+pString: ptr byte,
+args:vararg
+
+scanf PROTO, 
+pFormat:PTR BYTE,
+pBuffer:PTR BYTE, 
+args:VARARG
+
+array_length = 20
+
+pizza struct
+firm byte array_length dup(0)
+diameter dword 0
+ref dword 0
+pizza ends
+
+quantity = 3
+
+.data
+
+sizeT dword 32; aligned size of structure 
+
+first_pointer dword 0
+
+prompt1 db "Company name?",0
+prompt2 db "Diameter?", 0
+
+crlf db 0dh, 0ah, 0
+
+scanf_s db "%s", 0
+scanf_d db "%d", 0
+
+printf_d db "%d", 0
+
+;analysis pizza quantity dup (<>)
+
+.code
+
+asm_main proc
+
+invoke malloc, sizeT
+mov first_pointer, eax
+
+mov ecx, quantity
+L1:
+push ecx
+mov esi, eax
+invoke printf, addr prompt1
+invoke scanf, addr scanf_s, addr (pizza ptr[esi]).firm
+invoke printf, addr prompt2
+invoke scanf, addr scanf_d, addr (pizza ptr[esi]).diameter
+invoke malloc, sizeT
+mov (pizza ptr[esi]).ref, eax
+pop ecx
+loop L1
+mov(pizza ptr[esi]).ref, 0
+
+invoke printf, addr crlf
+
+mov esi, first_pointer
+mov ecx, quantity
+L2:
+push ecx
+invoke printf, addr(pizza ptr[esi]).firm
+invoke printf, addr crlf
+invoke printf, addr printf_d, (pizza ptr[esi]).diameter
+invoke printf, addr crlf
+invoke printf, addr crlf
+mov esi, (pizza ptr[esi]).ref
+pop ecx
+loop L2
+
+;free memory
+invoke free, first_pointer
+
+ret
+asm_main ENDP
+END

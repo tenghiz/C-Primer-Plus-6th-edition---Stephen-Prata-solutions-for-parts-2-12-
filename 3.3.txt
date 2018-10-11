@@ -1,0 +1,22 @@
+//3.3 - Latitude in decimal
+
+#include <iostream>
+
+int main()
+{
+	using namespace std;
+	cout << "Enter a latitude in degrees, minutes, and seconds\n";
+	cout << "Degrees: ";
+	int deg;
+	cin >> deg;
+	cout << "Minutes: ";
+	int min;
+	cin >> min;
+	cout << "Seconds: ";
+	int sec;
+	cin >> sec;
+	cout << "Latitude is ";
+	double latitude = (double)deg + (double)min / 60 + (double)sec / 3600;
+	cout << latitude << " degrees\n";
+	return 0;
+}

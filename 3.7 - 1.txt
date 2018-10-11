@@ -1,0 +1,48 @@
+====================== Calling ASM subroutine from C++ code =====================
+
+================= C++ code =========================
+// 3.7 - European style to US style
+
+#include <iostream>
+
+extern "C" double lkm_to_mpg(double l_km);
+
+int main()
+{
+	using namespace std;
+	cout << "Please enter your average consumption in liters per 100 km: ";
+	double l_km;
+	cin >> l_km;
+	double c = lkm_to_mpg(l_km);
+	cout << "Your average consumption in miles per gallon is " << c << " mpg\n";
+	return 0;
+}
+
+======================== ASM code =======================
+
+	.586
+	.model flat, C
+
+	lkm_to_mpg proto,
+	l_km: real8
+
+	.data
+
+	ml_in_hund_km real8 62.14
+	litres_in_gallon real8 3.875
+
+	.code
+
+	lkm_to_mpg proc,
+	l_km: real8
+
+	finit
+	fld ml_in_hund_km
+	fld litres_in_gallon
+	fmul
+	fld l_km
+	fdiv
+
+	ret
+	lkm_to_mpg endp
+	end

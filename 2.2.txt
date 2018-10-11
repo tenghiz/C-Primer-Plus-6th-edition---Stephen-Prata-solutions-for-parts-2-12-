@@ -1,0 +1,19 @@
+//2.2 - convert furlongs to yards
+
+#include <iostream>
+
+int fur_to_yard(int fur)
+{
+	return 220 * fur;
+}
+
+int main()
+{
+	using namespace std;
+	cout << "Please enter the distance in furlongs: ";
+	int furlong;
+	cin >> furlong;
+	int yard = fur_to_yard(furlong);
+	cout << "The distance is " << yard << " yards.\n";
+	return 0;
+}

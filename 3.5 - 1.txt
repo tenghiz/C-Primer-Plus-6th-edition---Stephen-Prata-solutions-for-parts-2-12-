@@ -1,0 +1,61 @@
+======================= ASM subroutine called by C++ =======================
+
+======================= C++ code ========================
+
+//3.5 - World population
+
+//This program calculates the percent of China s population compared to the world s.
+
+//ASM subroutine doesn t require to move obtained result in EAX.
+// Apparently, compiler automatically checks st(0). 
+// Don t implement FSTP instruction, in this case st(0) will contain NAN
+
+#include <iostream>
+
+extern "C" double world_pop(long long population, long China_pop);
+
+int main()
+{
+	using namespace std;
+	cout << "Enter the world's population: ";
+	long long population;
+	cin >> population;
+	cout << "Enter China's population: ";
+	long China_pop;
+	cin >> China_pop;
+	double China_to_world = world_pop(population, China_pop);
+	cout << "The population of China is " << China_to_world <<
+		" % of the world population" << endl;
+	return 0;
+}
+
+============================ ASM code =====================
+
+
+	.586
+	.model flat, C
+
+	world_pop proto,
+	population: qword, 
+	China_pop: dword
+
+	.data
+
+	hundred dword 100
+
+	.code
+
+	world_pop proc,
+	population: qword, 
+	China_pop: dword
+
+	finit
+	fild China_pop
+	fild population
+	fdiv
+	fild hundred
+	fmul
+
+	ret
+	world_pop endp
+	end

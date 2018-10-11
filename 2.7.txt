@@ -1,0 +1,28 @@
+//2.7 - time
+
+#include <iostream>
+
+void time(int h, int m)
+{
+	if (m < 10)
+	{
+		printf("Time: %d:0%d\n", h, m);
+	}
+	else
+	{
+		printf("Time: %d:%d\n", h, m);
+	}
+}
+
+int main()
+{
+	using namespace std;
+	cout << "Enter the number of hours: ";
+	int hour;
+	cin >> hour;
+	cout << "...and minutes: ";
+	int minute;
+	cin >> minute;
+	time(hour, minute);
+	return 0;
+}

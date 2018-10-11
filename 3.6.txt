@@ -1,0 +1,16 @@
+// 3.6 - Liters per 100 km
+
+#include <iostream>
+
+int main()
+{
+	using namespace std;
+	cout << "Please enter the distance you've traveled today: ";
+	double distance;
+	cin >> distance;
+	cout << "Please enter the quantity of gasoline used: ";
+	double gasoline;
+	cin >> gasoline;
+	printf("Today your consumption is %.1f liters per 100 km\n", 100 * (gasoline / distance));
+	return 0;
+}

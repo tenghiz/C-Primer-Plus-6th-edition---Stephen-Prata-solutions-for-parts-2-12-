@@ -1,0 +1,62 @@
+==================== Linking ASM code to C++ =============
+
+================= C++ ===================
+
+//3.2 - This program calculates BMI linking ASM function to C++ code
+
+extern "C" void asm_main();
+
+void main()
+{
+	asm_main();
+}
+
+===================== ASM ==========================
+.586
+.model flat, C
+
+printf proto, pString: ptr byte, args : vararg
+scanf proto, pFormat : ptr byte, pBuffer : ptr byte, args : vararg
+
+.data
+
+string1 byte "Please enter your height in cm: ", 0
+string2 byte "Please enter your weight in kg: ", 0
+string3 byte "Your body mass index is ", 0
+
+height dword 0
+cm_in_m dword 100
+weight dword 0
+
+format_string byte "%d", 0
+format_string1 byte "%.2f", 0dh, 0ah, 0
+
+result real8 ?
+
+.code
+
+asm_main proc
+
+invoke printf, addr string1
+invoke scanf, addr format_string, addr height
+
+invoke printf, addr string2
+invoke scanf, addr format_string, addr weight
+
+finit
+
+fild height
+fild cm_in_m
+fdiv; divide st(1) by st(0)
+fld st(0); duplicate st(0) to st(1)
+fmul; st(0)*st(1) ==> st(0) contains product of mul
+fild weight
+fdiv st(0), st(1)
+fst result
+
+invoke printf, addr string3
+invoke printf, addr format_string1, result
+
+ret
+asm_main endp
+end

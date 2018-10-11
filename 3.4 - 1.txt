@@ -1,0 +1,99 @@
+===================== Calling ASM subroutine from C++ =====================
+
+================== C++ ===========================
+
+//3.4 - Seconds to days
+// ASM external procedure is used
+// z = 0 for days, 1 for hours, 2 for minutes, 3 for remaining seconds
+
+#include <iostream>
+
+extern "C" int sec_to_days(long sec, int z);
+
+int main()
+{
+	using namespace std;
+	cout << "Enter the number of seconds: ";
+	long sec;
+	cin >> sec;
+	int days = sec_to_days(sec, 0);
+	cout << days << " days," << endl;
+	int hours = sec_to_days(sec, 1);
+	cout << hours << " hours," << endl;
+	int minutes = sec_to_days(sec, 2);
+	cout << minutes << " minutes," << endl;
+	int seconds = sec_to_days(sec, 3);
+	cout << seconds << " seconds." << endl;
+	return 0;
+}
+
+======================= ASM =======================
+
+;This subroutine recieves number of seconds and transforms it to number of days, hours and minutes
+
+.586
+.model flat, C
+
+sec_to_days proto,
+sec:dword,
+z: dword
+
+.data
+
+sec_in_min dword 60
+min_in_hr dword 60
+hr_in_day dword 24
+
+days dword 0
+hours dword 0
+minutes dword 0
+remainder dword 0
+
+.code
+
+sec_to_days proc,
+sec:dword,
+z : dword
+
+;calculate number of days
+mov eax, sec_in_min
+mul min_in_hr
+mul hr_in_day
+mov ebx, eax
+mov eax, sec
+mov edx, 0
+div ebx
+mov days, eax
+mov remainder, edx
+
+;calcualte number of hours
+mov eax, sec_in_min
+mul min_in_hr
+mov ebx, eax
+mov eax, remainder
+mov edx, 0
+div ebx
+mov hours, eax
+mov remainder, edx
+
+; calcualte number of minutes
+mov ebx, sec_in_min
+mov eax, remainder
+mov edx, 0
+div ebx
+mov minutes, eax
+mov remainder, edx; remaining seconds
+
+.if z == 0
+mov eax, days
+.elseif z == 1
+mov eax, hours
+.elseif z == 2
+mov eax, minutes
+.elseif z == 3
+mov eax, remainder
+.endif
+
+ret
+sec_to_days endp
+end

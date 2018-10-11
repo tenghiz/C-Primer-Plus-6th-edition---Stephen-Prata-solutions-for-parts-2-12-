@@ -1,0 +1,19 @@
+//5.9 - Enter words (using STRING class)
+
+#include <iostream>
+#include <string>
+
+int main()
+{
+	using namespace std;
+	cout << "Enter words (to stop, type the word 'done'): ";
+	string word_;
+	int counter = 0;
+	do
+	{
+		cin >> word_;
+		counter++;
+	} while (word_ != "done");
+	cout << "You've entered " << counter -1 << " words." << endl;
+	return 0;
+}

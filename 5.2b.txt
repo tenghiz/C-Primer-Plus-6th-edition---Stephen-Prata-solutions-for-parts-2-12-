@@ -1,0 +1,74 @@
+======================== C++ =======================
+//5.2 - Factorial (using assembly) - improvement
+
+//Multiplication using 32-bit registers gives product which is stored in EDX:EAX.
+// Multiplication of 2 qwords using 32-bit registers can be performed in a following way:
+// EDX1:EAX1 * EDX2:EAX2 = EDX1*EDX2 + EDX1*EAX2 + EAX1*EDX2 + EAX1*EAX2.
+//Here the task is much simpler, because one of multiplicands is a simple dword:
+// EDX1:EAX1 * EAX2.
+
+// Maximal value 20!
+
+#include <iostream>
+
+extern "C" void factorial(long long * arr, int ArrSize);
+
+int main()
+{
+	using namespace std;
+	const int ArrSize = 21;
+	long long arr[ArrSize];
+	arr[1] = arr[0] = 1LL;
+	factorial(arr, ArrSize);
+	for (int i = 0; i < ArrSize; i++)
+		cout << i << "! = " << arr[i] << endl;
+	return 0;
+}
+
+=========================== ASM ==============================
+; This ASM subroutine performs multiplication of one dword by one qword using 32 - bit regs
+; ESI points to low dword.
+; EDI points to high dword.
+; First step is multiplication of low dword : EAX1*EAX2 = EDX3 : EAX3.
+; Second step is multiplication of high dword : EDX1*EAX2 = (EDX4) : EAX4 - here result in EDX is discarded, otherwise it must be already 128 - bit number!
+;Third step is addition of two high dwords: EDX3 + EAX4
+
+.model flat, C
+
+.code
+factorial proc
+
+push ebp
+mov ebp, esp
+
+mov esi, [ebp + 8]; arr
+mov ecx, [ebp + 12]; ArrSize
+add esi, 16; point to third member of array(long long)
+mov edi, esi
+add edi, 4; edi points to high dword of third member
+mov ebx, 2; start from the 2nd member of array
+L1:
+cmp ebx, ecx
+je L2
+; multiply first EAX1 by EAX2
+mov edx, 0
+mov eax, [esi - 8]
+mul ebx
+mov[esi], eax
+add esi, 4
+mov[esi], edx
+; now multiply EDX1 by EAX2 and add result to previous HIGH DWORD
+mov edx, 0
+mov eax, [edi - 8]
+mul ebx
+add[esi], eax; add result to previously obtained high dword
+add esi, 4
+add edi, 8
+inc ebx
+jmp L1
+L2 :
+
+pop ebp
+ret
+factorial endp
+end

@@ -1,0 +1,19 @@
+//2.4 - age in months
+
+#include <iostream>
+
+int age_to_mnth(int yr)
+{
+	return 12 * yr;
+}
+
+int main()
+{
+	using namespace std;
+	cout << "Please enter your age: ";
+	int year;
+	cin >> year;
+	int months = age_to_mnth(year);
+	cout << "Your age is " << months << " months.\n";
+	return 0;
+}

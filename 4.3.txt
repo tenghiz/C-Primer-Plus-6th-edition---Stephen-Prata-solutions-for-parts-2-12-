@@ -1,0 +1,30 @@
+//4.3 - C-string concatenation (without using pointers)
+
+#include <iostream>
+#include <cstring>
+
+int main()
+{
+	using namespace std;
+	char fname[10];
+	char lname[30];
+	cout << "Enter your first name: ";
+	cin >> fname;
+	cout << "Enter your last name: ";
+	cin >> lname;
+	int z = strlen(lname);
+	lname[z] = ',';
+	z = z + 1;
+	lname[z] = ' ';
+	z = z + 1;
+	int y = strlen(fname);
+	for (int i = 0; i < y; i++)
+	{
+		lname[z+i] = fname[i];
+	}
+	z = z + y;
+	lname[z] = '\0';
+	cout << "In a single string: ";
+	cout << lname << endl;
+	return 0;
+}
